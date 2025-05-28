@@ -1,0 +1,73 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 40px;
+    background-color: #fff;
+    flex-wrap: wrap; // Cho responsive
+  
+    .logo {
+      height: 30px;
+    }
+  
+    .nav-links {
+      display: flex;
+      gap: 50px;
+  
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #000;
+        cursor: pointer;
+        white-space: nowrap;
+  
+        &:hover {
+          font-weight: 500;
+        }
+      }
+    }
+  
+    .auth-buttons {
+      display: flex;
+      gap: 12px;
+  
+      .register {
+        background-color: black;
+        color: white;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+      }
+  
+      .login {
+        background-color: #f9b4dc;
+        color: white;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+      }
+    }
+  
+    // Responsive
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+  
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+  
+      .auth-buttons {
+        align-self: flex-end;
+      }
+    }
+  }
+  
