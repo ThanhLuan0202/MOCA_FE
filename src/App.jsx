@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Header from './components/header/header'
 import Footer from './components/footer/footer'
-import HomePage from './pages/HomePage'
 import AppRoutes from './routes/AppRoutes'
 function App() {
   return (

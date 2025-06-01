@@ -1,0 +1,176 @@
+.contact-form-section {
+  background-color: #fff0fa; // Light pink background
+  border: 2px dotted #ffb6e9; // Dotted pink border
+  padding: 60px 0;
+  margin: 40px auto; // Add margin and center
+  max-width: 1200px; // Limit max width
+  border-radius: 20px; // Rounded corners
+
+  .container {
+    display: flex; // Use flexbox to arrange text and form
+    gap: 40px; // Space between text and form
+    padding: 0 20px;
+    max-width: 1000px; // Adjust container max width
+    margin: 0 auto; // Center container
+    align-items: center; // Vertically align items
+  }
+
+  .text-content {
+    flex: 1; // Allow text content to grow
+    max-width: 500px; // Limit text content width
+
+    h2 {
+      font-size: 48px;
+      font-weight: 400;
+      color: #ff85da; // Pink color
+      line-height: 1.2;
+      margin: 0; // Remove default margin
+    }
+  }
+
+  .form-content {
+    flex: 1; // Allow form content to grow
+    max-width: 400px; // Limit form content width
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; // Space between form groups
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-size: 14px;
+          color: #000000;
+          margin-bottom: 8px;
+          font-weight: 500; // Make label bold
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+          padding: 12px 15px;
+          border: 1px solid #e0e0e0; // Light gray border
+          border-radius: 20px; // Rounded corners
+          font-size: 16px;
+          color: #333;
+          background-color: #f8f8f8; // Light gray background
+          width: 100%;
+          box-sizing: border-box; // Include padding in width
+
+          &::placeholder {
+            color: #aaa;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: #ff85da; // Pink border on focus
+            box-shadow: 0 0 5px rgba(255, 133, 218, 0.3); // Pink shadow on focus
+          }
+        }
+
+        textarea {
+          resize: vertical; // Allow vertical resizing
+          min-height: 100px; // Minimum height for textarea
+          border-radius: 15px; // Slightly less rounded for textarea
+        }
+      }
+
+      .submit-button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #000; // Black background
+        color: white;
+        border: none;
+        border-radius: 20px; // Rounded corners
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #333; // Darker gray on hover
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .contact-form-section {
+    padding: 40px 0;
+
+    .container {
+      flex-direction: column; // Stack text and form vertically
+      gap: 30px;
+      text-align: center; // Center content
+
+      .text-content {
+        max-width: 100%; // Allow text to take full width
+
+        h2 {
+          font-size: 36px;
+          text-align: center; // Ensure title is centered
+        }
+      }
+
+      .form-content {
+        max-width: 100%; // Allow form to take full width
+        padding: 0 15px; // Add some horizontal padding
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-section {
+    padding: 30px 0;
+    margin: 30px auto; // Adjust margin
+    border-radius: 15px; // Adjust border radius
+
+    .container {
+      gap: 20px;
+
+      .text-content {
+        h2 {
+          font-size: 28px; // Further reduce font size
+        }
+      }
+
+      .form-content {
+        padding: 0 10px; // Adjust padding
+
+        form {
+          gap: 15px; // Adjust gap
+
+          .form-group {
+            label {
+              font-size: 13px; // Adjust font size
+              margin-bottom: 5px; // Adjust margin
+            }
+
+            input[type="text"],
+            input[type="email"],
+            textarea {
+              padding: 10px 12px; // Adjust padding
+              font-size: 15px; // Adjust font size
+            }
+
+            textarea {
+              min-height: 80px; // Adjust min height
+            }
+          }
+
+          .submit-button {
+            padding: 10px; // Adjust padding
+            font-size: 15px; // Adjust font size
+          }
+        }
+      }
+    }
+  }
+} 

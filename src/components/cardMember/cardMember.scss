@@ -1,0 +1,280 @@
+.card-member-section {
+  padding: 80px 0;
+  background-color: #fff;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center; // Center content by default
+
+    h2 {
+      font-size: 48px;
+      font-weight: 400;
+      color: #ff85da; // Pink color
+      margin-bottom: 40px;
+    }
+
+    .cards-container {
+      display: flex; // Use flexbox for layout
+      justify-content: center; // Center the cards
+      gap: 30px; // Space between cards
+      flex-wrap: wrap; // Allow wrapping on smaller screens
+    }
+
+    .member-card {
+      background-color: #f8f8f8; // Light gray background
+      border-radius: 20px; // Rounded corners
+      padding: 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%; // Full width on very small screens
+      max-width: 350px; // Maximum width for cards
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+
+      .package-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+
+        .package-title {
+          font-size: 18px;
+          font-weight: 600;
+          background-color: #e0e0e0; // Gray background for title
+          padding: 4px 12px 4px 12px;
+          gap:10px;
+          border-radius: 15px; // Pill shape
+        }
+
+        .package-badge {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff85da; // Pink color for badge
+        }
+      }
+
+      .package-price {
+        font-size: 40px;
+        font-weight: bold;
+        color: #000; // Black color for price
+        margin-bottom: 10px;
+
+        &.free {
+            color: #000; // Black color for FREE
+        }
+      }
+
+      .package-description {
+        font-size: 15px;
+        color: #666;
+        line-height: 1.4;
+        margin-bottom: 20px;
+        flex-grow: 1; // Push button to the bottom
+      }
+
+      .package-features {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+        width: 100%;
+
+        li {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          font-size: 15px;
+          color: #333;
+
+          .check-icon {
+            
+            margin-right: 10px;
+          }
+        }
+      }
+
+      .package-button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &.primary {
+            background-color: #ff85da; // Pink background for primary button
+            color: white;
+
+            &:hover {
+                background-color: #ff66cc; // Darker pink on hover
+            }
+        }
+
+        &:not(.primary) {
+            background-color: #000; // Black background for other buttons
+            color: white;
+
+            &:hover {
+                background-color: #333; // Darker gray on hover
+            }
+        }
+      }
+
+      &.monthly {
+        background-color: #fff0fa; // Lighter pink background for monthly card
+
+        .package-title {
+             background-color: #ffb6e9; // Lighter pink for title background
+        }
+
+         .package-price {
+            color: #ff4fcf; // Darker pink for price
+         }
+
+        .package-features li .check-icon {
+           
+        }
+      }
+
+      &.yearly {
+         .package-price {
+            color: #ff85da; // Pink color for price
+         }
+
+         .package-features li .check-icon {
+            
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .card-member-section {
+    padding: 60px 0;
+
+    h2 {
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
+
+    .cards-container {
+      gap: 20px;
+    }
+
+    .member-card {
+      max-width: 300px; // Adjust max width
+      padding: 25px; // Adjust padding
+
+      .package-header {
+        margin-bottom: 15px; // Adjust margin
+
+        .package-title {
+          font-size: 16px; // Adjust font size
+          padding: 6px 12px; // Adjust padding
+        }
+
+        .package-badge {
+            font-size: 12px; // Adjust font size
+        }
+      }
+
+      .package-price {
+        font-size: 32px; // Adjust font size
+        margin-bottom: 8px; // Adjust margin
+      }
+
+      .package-description {
+        font-size: 14px; // Adjust font size
+        margin-bottom: 15px; // Adjust margin
+      }
+
+      .package-features {
+        margin-bottom: 20px; // Adjust margin
+
+        li {
+          font-size: 14px; // Adjust font size
+          margin-bottom: 8px; // Adjust margin
+
+          .check-icon {
+            margin-right: 8px; // Adjust margin
+          }
+        }
+      }
+
+      .package-button {
+        padding: 10px; // Adjust padding
+        font-size: 15px; // Adjust font size
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .card-member-section {
+    padding: 40px 0;
+
+    h2 {
+      font-size: 28px; // Further reduce font size
+      margin-bottom: 20px; // Adjust margin
+    }
+
+    .cards-container {
+      gap: 15px; // Adjust gap
+    }
+
+    .member-card {
+      max-width: 100%; // Allow card to take full width
+      padding: 20px; // Adjust padding
+
+      .package-header {
+        margin-bottom: 10px; // Adjust margin
+
+        .package-title {
+          font-size: 15px; // Adjust font size
+          padding: 5px 10px; // Adjust padding
+        }
+
+        .package-badge {
+            font-size: 11px; // Adjust font size
+        }
+      }
+
+      .package-price {
+        font-size: 28px; // Adjust font size
+        margin-bottom: 6px; // Adjust margin
+      }
+
+      .package-description {
+        font-size: 13px; // Adjust font size
+        margin-bottom: 10px; // Adjust margin
+      }
+
+      .package-features {
+        margin-bottom: 15px; // Adjust margin
+
+        li {
+          font-size: 13px; // Adjust font size
+          margin-bottom: 6px; // Adjust margin
+
+          .check-icon {
+            margin-right: 6px; // Adjust margin
+          }
+        }
+      }
+
+      .package-button {
+        padding: 8px; // Adjust padding
+        font-size: 14px; // Adjust font size
+      }
+    }
+  }
+} 

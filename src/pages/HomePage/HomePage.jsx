@@ -1,11 +1,13 @@
 import React from 'react';
-import img1 from '../assets/img1.jpg';
-import img2 from '../assets/circleline.png';
-import img3 from '../assets/babauDrikMilk.jpg';
-import img4 from '../assets/circle.png'
+import img1 from '../../assets/img1.jpg';
+import img3 from '../../assets/babauDrikMilk.jpg';
+import img4 from '../../assets/circle.png'
 import { BsStars } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import CardSlider from '../components/cardslide/cardSlider';
+import CardSlider from '../../components/cardslide/cardSlider';
+import CommunityCardSection from '../../components/communitycard/communitycard';
+import CardMemberSection from '../../components/cardMember/cardMember';
+import ContactFormSection from '../../components/form/form';
 
 const HomePage = () => {
   return (
@@ -80,8 +82,11 @@ const HomePage = () => {
           <h1 style={styles.TitleMiddle} >Chúng tôi là ai ?</h1>
           <p style={styles.subTextMiddle}>Chúng tôi cung cấp nền tảng hỗ trợ chăm sóc sức khỏe thai kỳ cá nhân hóa bằng AI – giúp mẹ bầu theo dõi quá trình mang thai, nhận tư vấn phù hợp và kết nối cộng đồng một cách an toàn và tiện lợi.</p>
         </div>
-        <div style={{ padding: '40px' }}>
+        <div style={{ padding: '0px' }}>
       <CardSlider />
+      <CommunityCardSection/>
+      <CardMemberSection/>
+      <ContactFormSection/>
     </div>
       </div>
 
@@ -157,6 +162,12 @@ const styles = {
     lineHeight: '1.2',
     color: '#666',
     opacity: '50%',
+    maxWidth: '600px',
+    margin:' 0 auto',
+    textAlign: 'center',
+
+
+
   },
 
   // Media Queries for Responsiveness
@@ -209,6 +220,275 @@ const styles = {
     },
   },
 
+  '@media (max-width: 502px)': {
+    container: {
+      padding: '0 8px',
+      gap: '25px',
+    },
+    imageBox: {
+      maxWidth: '100%',
+    },
+    image: {
+      width: '100%',
+      height: 'auto',
+      borderRadius: '20px',
+      objectFit: 'cover',
+    },
+    textOverlay: {
+      bottom: '8px',
+      left: '8px',
+    },
+    subText: {
+      fontSize: '11px',
+    },
+    title: {
+      fontSize: '18px',
+    },
+    textBox: {
+      padding: '8px',
+      textAlign: 'center',
+    },
+    heading: {
+      fontSize: '20px',
+      marginBottom: '8px',
+    },
+    paragraph: {
+      fontSize: '14px',
+    },
+    cardRow: {
+      gap: '15px',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    cardBox: {
+      width: '95%',
+      maxWidth: '300px',
+      height: 'auto',
+      padding: '15px',
+    },
+    cardTitle: {
+      fontSize: '20px',
+    },
+    cardText: {
+      fontSize: '13px',
+    },
+    DirectBox: {
+      width: '100%',
+      justifyContent: 'center',
+      padding: '12px',
+    },
+    iconBox: {
+      width: '40px',
+      height: '40px',
+    },
+    aiCard: {
+      width: '95%',
+      maxWidth: '300px',
+      height: 'auto',
+      padding: '15px',
+      flexDirection: 'column',
+    },
+    aiIcon: {
+      width: '120px',
+      height: '80px',
+      marginBottom: '6px',
+    },
+    aiTextPink: {
+      fontSize: '24px',
+    },
+    aiTextBlack: {
+      fontSize: '24px',
+    },
+    imageCard: {
+      width: '95%',
+      maxWidth: '300px',
+      height: 'auto',
+      marginTop: '15px',
+    },
+    speechBubble: {
+      top: '-20px',
+      padding: '4px 6px',
+      maxWidth: '200px',
+    },
+    BubbleText: {
+      fontSize: '14px',
+    },
+    speechSubText: {
+      fontSize: '10px',
+    },
+    cardImage: {
+      width: '100%',
+      height: 'auto',
+      borderRadius: '20px',
+    },
+    TextMiddle: {
+      marginBottom: '30px',
+    },
+    TitleMiddle: {
+      fontSize: '24px',
+      marginTop: '20px',
+      lineHeight: '1.4',
+    },
+    subTextMiddle: {
+      fontSize: '14px',
+      padding: '0 8px',
+    },
+  },
+
+  '@media (max-width: 375px)': {
+    container: {
+      padding: '0 5px',
+      gap: '15px',
+    },
+    image: {
+      height: '200px',
+    },
+    textOverlay: {
+      bottom: '5px',
+      left: '5px',
+    },
+    subText: {
+      fontSize: '9px',
+    },
+    title: {
+      fontSize: '16px',
+    },
+    textBox: {
+      padding: '5px',
+    },
+    heading: {
+      fontSize: '18px',
+      marginBottom: '5px',
+    },
+    paragraph: {
+      fontSize: '12px',
+    },
+    cardBox: {
+      padding: '10px',
+    },
+    cardTitle: {
+      fontSize: '16px',
+    },
+    cardText: {
+      fontSize: '10px',
+    },
+    iconBox: {
+      width: '35px',
+      height: '35px',
+    },
+    aiIcon: {
+      width: '100px',
+      height: '70px',
+      marginBottom: '5px',
+    },
+    aiTextPink: {
+      fontSize: '20px',
+    },
+    aiTextBlack: {
+      fontSize: '20px',
+    },
+    speechBubble: {
+      top: '-15px',
+      padding: '3px 5px',
+      maxWidth: '180px',
+    },
+    BubbleText: {
+      fontSize: '12px',
+    },
+    speechSubText: {
+      fontSize: '8px',
+    },
+    TextMiddle: {
+      marginBottom: '15px',
+    },
+    TitleMiddle: {
+      fontSize: '18px',
+      marginTop: '15px',
+      lineHeight: '1.5',
+    },
+    subTextMiddle: {
+      fontSize: '11px',
+      padding: '0 5px',
+    },
+  },
+
+  // Further refinements for very small screens (e.g., older iPhones)
+  '@media (max-width: 320px)': {
+    container: {
+      padding: '0 5px',
+      gap: '10px',
+    },
+    image: {
+      height: '180px',
+    },
+    textOverlay: {
+      bottom: '5px',
+      left: '5px',
+    },
+    subText: {
+      fontSize: '8px',
+    },
+    title: {
+      fontSize: '14px',
+    },
+    textBox: {
+      padding: '5px',
+    },
+    heading: {
+      fontSize: '16px',
+      marginBottom: '5px',
+    },
+    paragraph: {
+      fontSize: '11px',
+    },
+    cardBox: {
+      padding: '8px',
+    },
+    cardTitle: {
+      fontSize: '14px',
+    },
+    cardText: {
+      fontSize: '9px',
+    },
+    iconBox: {
+      width: '30px',
+      height: '30px',
+    },
+    aiIcon: {
+      width: '80px',
+      height: '60px',
+      marginBottom: '4px',
+    },
+    aiTextPink: {
+      fontSize: '18px',
+    },
+    aiTextBlack: {
+      fontSize: '18px',
+    },
+    speechBubble: {
+      top: '-10px',
+      padding: '2px 4px',
+      maxWidth: '150px',
+    },
+    BubbleText: {
+      fontSize: '11px',
+    },
+    speechSubText: {
+      fontSize: '7px',
+    },
+    TextMiddle: {
+      marginBottom: '10px',
+    },
+    TitleMiddle: {
+      fontSize: '16px',
+      marginTop: '10px',
+      lineHeight: '1.6',
+    },
+    subTextMiddle: {
+      fontSize: '10px',
+      padding: '0 5px',
+    },
+  },
 
   ////card
   cardRow: {
@@ -228,7 +508,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: '600px',
+    height: 'auto',
     maxWidth: '312px',
     position: 'relative',
   },
@@ -274,15 +554,16 @@ const styles = {
   },
 
   aiCard: {
-    width:'500px',
-    height:'600px',
+    height:'auto',
+    flex: '1 1 300px',
+    maxWidth: '500px',
     display: 'flex',
     borderRadius:'20px',
     flexDirection: 'column',
     backgroundColor: '#fff0fa',
     alignItems: 'center',
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 
   aiIcon: {
@@ -308,8 +589,8 @@ const styles = {
 
   imageCard: {
     flex: '1 1 300px',
-    width: '486px',
-    height:'432.03px',
+    height:'auto',
+    maxWidth: '486px',
     marginTop:'40px',
     borderRadius: '24px',
     overflow: 'visible',

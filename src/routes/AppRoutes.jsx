@@ -1,15 +1,19 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from '../pages/HomePage/HomePage';
+import LoginPage from '../pages/LoginPage/Login';
+import RegisterPage from '../pages/RegisterPage/Register';
 // import thêm các page khác nếu có
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      {/* <Route path="/gioi-thieu" element={<AboutPage />} /> */}
-      {/* Thêm route khác ở đây */}
-    </Routes>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/" element={<HomePage />} /> {/* Đảm bảo route trang chủ tồn tại */}
+            {/* Các routes khác */}
+          </Routes>
+        
   );
 };
 

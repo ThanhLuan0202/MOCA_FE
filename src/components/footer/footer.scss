@@ -145,3 +145,101 @@
     }
   }
   
+// Media Queries for Responsiveness
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 40px; // Adjust padding for tablets
+
+    .footer__top {
+      flex-direction: column; // Stack top sections vertically
+      align-items: center; // Center align items
+      gap: 40px; // Add space between stacked sections
+
+      .footer__newsletter {
+        max-width: 100%; // Allow newsletter to take full width
+        text-align: center; // Center newsletter text
+      }
+
+      .footer__links {
+        justify-content: center; // Center link columns
+        gap: 30px; // Adjust gap between link columns
+      }
+    }
+
+    .footer__bottom {
+      flex-direction: column; // Stack bottom elements vertically
+      gap: 15px; // Add space between stacked elements
+
+      .footer__socials {
+        margin-top: 10px; // Adjust margin
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 20px 20px; // Further adjust padding for mobile
+
+    .footer__logo img {
+      width: 80px; // Reduce logo size
+    }
+
+    .footer__top {
+      gap: 30px; // Adjust gap
+
+      .footer__newsletter {
+        h2 {
+          font-size: 20px; // Reduce heading font size
+          margin-bottom: 15px; // Adjust margin
+        }
+
+        .footer__input-group {
+          padding: 4px 8px; // Adjust padding
+
+          input {
+            padding: 10px 12px; // Adjust input padding
+            font-size: 14px; // Reduce input font size
+          }
+
+          button {
+            width: 35px; // Reduce button size
+            height: 35px; // Reduce button size
+            font-size: 18px; // Reduce button font size
+          }
+        }
+      }
+
+      .footer__links {
+        flex-direction: column; // Stack link columns vertically
+        align-items: center; // Center align link columns
+        gap: 20px; // Adjust gap
+
+        .footer__column {
+          min-width: auto; // Remove min-width constraint
+          text-align: center; // Center link text
+
+          h4 {
+            margin-bottom: 8px; // Adjust margin
+          }
+
+          p {
+            font-size: 13px; // Reduce link font size
+            line-height: 1.8; // Adjust line height
+          }
+        }
+      }
+    }
+
+    .footer__bottom {
+      gap: 10px; // Adjust gap
+    }
+
+    .footer__copyright {
+      padding-top: 15px; // Adjust padding
+      margin-top: 20px; // Adjust margin
+      font-size: 12px; // Reduce copyright font size
+    }
+  }
+}
+  
