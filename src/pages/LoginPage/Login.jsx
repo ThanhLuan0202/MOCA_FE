@@ -4,9 +4,11 @@ import './Login.scss'; // Import the SCSS file
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"; // Assuming react-icons is installed
 import { FcGoogle } from "react-icons/fc"; // Assuming react-icons is installed
 import authService from '../../services/auth';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -25,22 +27,16 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('preventDefault called');
-        console.log('handleSubmit started'); // Log 1
         setError('');
         setLoading(true);
 
         try {
-            console.log('Calling authService.login'); // Log 2
             await authService.login(formData.email, formData.password);
-            console.log('authService.login finished successfully'); // Log 3
-            console.log('Login successful, attempting to navigate...');
-            navigate('/'); // Chuyển hướng về trang chủ sau khi đăng nhập thành công
+            login(); // Update global auth state
+            navigate('/');
         } catch (error) {
-            console.error('Login error caught in handleSubmit:', error); // Log 4
             setError(error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
         } finally {
-            console.log('handleSubmit finished'); // Log 5
             setLoading(false);
         }
     };
