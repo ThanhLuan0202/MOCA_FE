@@ -1,0 +1,60 @@
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between search bar and button */
+  margin: 40px auto; /* Center the container */
+  max-width: 600px; /* Increase the width */
+  width: 100%; /* Ensure it tries to take full width */
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex-grow: 1; /* Allow input to take available space */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px 10px 40px; /* Corrected padding */
+  border: 1px solid #ff85da; /* Pink border */
+  border-radius: 25px; /* Rounded shape */
+  font-size: 1em;
+  outline: none; /* Remove default outline */
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: #ff66cc; /* Darker pink on focus */
+  }
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; /* Icon color */
+}
+
+.search-button {
+  width: 40px; /* Circular button */
+  height: 40px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Make it round */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333; /* Darken on hover */
+  }
+
+  /* Add an arrow icon if desired, e.g., using an SVG or icon font */
+  &::after {
+    content: "→"; /* Example arrow character */
+    font-size: 1.2em;
+  }
+}

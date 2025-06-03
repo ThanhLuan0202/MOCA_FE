@@ -1,28 +1,62 @@
-import React, { useState } from 'react';
-import './pregnancyDiary.css'; 
+import React, { useState } from "react";
+import "./pregnancyDiary.css";
+import Comment from "../../components/comment/comment";
 
 const PregnancyDiary = () => {
- 
-  const [currentWeek, setCurrentWeek] = useState(12); 
-  const [currentDayOfWeek, setCurrentDayOfWeek] = useState(3); 
+  const [currentWeek] = useState(12);
+  const [currentDayOfWeek] = useState(3);
 
-
+  // Sample diary entries data
+  const diaryEntries = [
+    {
+      date: "17/06/2025",
+      week: "Tuần 12",
+      title: "Hôm nay tôi vui",
+      content:
+        "Hôm nay bé con đã đạp những cái đầu tiên, nhẹ lắm nhưng đủ làm tim mẹ rung lên vì hạnh phúc. Cảm giác ấy thật kỳ diệu, như một lời chào từ thiên thần nhỏ trong bụng. Mỗi ngày trôi qua, mẹ lại thấy mình mạnh mẽ hơn, dù đôi khi mệt mỏi, chóng mặt hay mất ngủ. Nhưng chỉ cần nghĩ đến khoảnh khắc được ôm con trong vòng tay, mọi khó khăn đều trở nên xứng đáng. Cảm ơn con vì đã đến bên mẹ!",
+    },
+    {
+      date: "17/06/2025",
+      week: "Tuần 12",
+      title: "Hôm nay tôi vui",
+      content:
+        "Hôm nay bé con đã đạp những cái đầu tiên, nhẹ lắm nhưng đủ làm tim mẹ rung lên vì hạnh phúc. Cảm giác ấy thật kỳ diệu, như một lời chào từ thiên thần nhỏ trong bụng. Mỗi ngày trôi qua, mẹ lại thấy mình mạnh mẽ hơn, dù đôi khi mệt mỏi, chóng mặt hay mất ngủ. Nhưng chỉ cần nghĩ đến khoảnh khắc được ôm con trong vòng tay, mọi khó khăn đều trở nên xứng đáng. Cảm ơn con vì đã đến bên mẹ!",
+    },
+    {
+      date: "17/06/2025",
+      week: "Tuần 12",
+      title: "Hôm nay tôi vui",
+      content:
+        "Hôm nay bé con đã đạp những cái đầu tiên, nhẹ lắm nhưng đủ làm tim mẹ rung lên vì hạnh phúc. Cảm giác ấy thật kỳ diệu, như một lời chào từ thiên thần nhỏ trong bụng. Mỗi ngày trôi qua, mẹ lại thấy mình mạnh mẽ hơn, dù đôi khi mệt mỏi, chóng mặt hay mất ngủ. Nhưng chỉ cần nghĩ đến khoảnh khắc được ôm con trong vòng tay, mọi khó khăn đều trở nên xứng đáng. Cảm ơn con vì đã đến bên mẹ!",
+    },
+    {
+      date: "17/06/2025",
+      week: "Tuần 12",
+      title: "Hôm nay tôi vui",
+      content:
+        "Hôm nay bé con đã đạp những cái đầu tiên, nhẹ lắm nhưng đủ làm tim mẹ rung lên vì hạnh phúc. Cảm giác ấy thật kỳ diệu, như một lời chào từ thiên thần nhỏ trong bụng. Mỗi ngày trôi qua, mẹ lại thấy mình mạnh mẽ hơn, dù đôi khi mệt mỏi, chóng mặt hay mất ngủ. Nhưng chỉ cần nghĩ đến khoảnh khắc được ôm con trong vòng tay, mọi khó khăn đều trở nên xứng đáng. Cảm ơn con vì đã đến bên mẹ!",
+    },
+    {
+      date: "17/06/2025",
+      week: "Tuần 12",
+      title: "Hôm nay tôi vui",
+      content:
+        "Hôm nay bé con đã đạp những cái đầu tiên, nhẹ lắm nhưng đủ làm tim mẹ rung lên vì hạnh phúc. Cảm giác ấy thật kỳ diệu, như một lời chào từ thiên thần nhỏ trong bụng. Mỗi ngày trôi qua, mẹ lại thấy mình mạnh mẽ hơn, dù đôi khi mệt mỏi, chóng mặt hay mất ngủ. Nhưng chỉ cần nghĩ đến khoảnh khắc được ôm con trong vòng tay, mọi khó khăn đều trở nên xứng đáng. Cảm ơn con vì đã đến bên mẹ!",
+    },
+  ];
 
   const weekProgressPercentage = (currentDayOfWeek / 7) * 100;
 
-  const radius = 100; 
-  const circumference = 2 * Math.PI * radius; 
+  const radius = 100;
+  const circumference = 2 * Math.PI * radius;
 
-
-  const strokeDashoffset = circumference * (100 - weekProgressPercentage) / 100;
+  const strokeDashoffset =
+    (circumference * (100 - weekProgressPercentage)) / 100;
 
   return (
     <div className="pregnancy-diary-page">
-
       <div className="top-section">
-
         <div className="left-column">
-
           <div className="month-nav">
             <span className="arrow">←</span>
             <span className="month">Tháng 8</span>
@@ -45,7 +79,6 @@ const PregnancyDiary = () => {
             <button className="edit-button">Chỉnh sửa</button>
           </div>
 
-
           <div className="user-info">
             <div className="user-name">Nguyen Thanh Luan</div>
             <div className="user-details">
@@ -57,12 +90,9 @@ const PregnancyDiary = () => {
           </div>
         </div>
 
-
         <div className="right-column">
           <div className="pregnancy-progress">
-
             <svg className="progress-circle-svg" viewBox="0 0 240 240">
-
               <circle
                 className="progress-circle-background"
                 cx="120"
@@ -89,13 +119,16 @@ const PregnancyDiary = () => {
             </div>
 
             <div className="tip-box">
-              <p> Để chăm sóc bé khỏe mạnh hãy đảm bảo chế độ dinh dưỡng lành mạnh!</p>
+              <p>
+                {" "}
+                Để chăm sóc bé khỏe mạnh hãy đảm bảo chế độ dinh dưỡng lành
+                mạnh!
+              </p>
               <button className="tip-button">Tham khảo</button>
             </div>
           </div>
         </div>
       </div>
-
 
       <div className="bottom-section">
         <div className="feelings-title">Bạn đang cảm thấy như thế nào ?</div>
@@ -114,8 +147,27 @@ const PregnancyDiary = () => {
           </div>
         </div>
       </div>
+
+      {/* Render diary entries */}
+      <div className="tittle">
+        <h3>Nhật ký thai kỳ</h3>
+      </div>
+      <div className="diary-entries-list">
+        {diaryEntries.map((entry, index) => (
+          <Comment
+            key={index}
+            date={entry.date}
+            week={entry.week}
+            title={entry.title}
+            content={entry.content}
+          />
+        ))}
+      </div>
+
+      {/* View More button */}
+      <button className="view-more-button">Xem thêm</button>
     </div>
   );
 };
 
-export default PregnancyDiary; 
+export default PregnancyDiary;

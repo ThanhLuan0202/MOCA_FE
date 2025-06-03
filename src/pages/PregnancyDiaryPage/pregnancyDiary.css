@@ -64,7 +64,8 @@
 .add-button, .edit-button, .edit-profile-button, .tip-button {
   padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
+  
   cursor: pointer;
   font-size: 1em;
 }
@@ -75,8 +76,9 @@
 }
 
 .edit-button, .edit-profile-button, .tip-button {
-  background-color: #eee;
-  color: #333;
+  background-color: #FF85DA;
+  
+  color: white;
 }
 
 .user-info {
@@ -103,7 +105,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #eee;
   border-radius: 10px;
   padding: 20px;
   position: relative; 
@@ -176,6 +177,7 @@
   bottom: 20px; 
   right: -120px;
   background-color: #FFFFFF; 
+  color:#ff85da;
   border-radius: 10px;
   padding: 15px;
   max-width: 300px; 
@@ -197,8 +199,8 @@
 
 .feelings-title {
   font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-weight: 400;
+  margin-bottom:80px;
 }
 
 .feeling-options {
@@ -208,15 +210,24 @@
 }
 
 .feeling-box {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 20px;
+  border: 1px solid #ffb6c1;
+  border-radius: 15px;
+  padding: 35px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  width: 150px; 
-  background-color: #ffe0f0; 
+  width: 300px;
+  background-color: #fff0f5;
+  box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feeling-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
 }
 
 .emoji {
@@ -224,10 +235,227 @@
 }
 
 .feeling-text {
-  font-weight: bold;
+  font-weight: normal;
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 5px;
 }
 
 .feeling-description {
-  font-size: 0.9em;
-  color: #555;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+}
+
+.diary-entries-list {
+  width: 100%;
+  max-width: 900px; /* Increase max-width to allow wider entries */
+  margin: 40px auto 20px auto; /* Center the list and add vertical margins */
+}
+
+.tittle {
+  font-size: 32px;
+  margin-top: 120px;
+  margin-bottom: 20px;
+  text-align: left; /* Align text to the left */
+  width: 100%;
+  max-width: 900px; /* Match max-width of diary entries */
+  margin-left: auto; /* Center the title block */
+  margin-right: auto; /* Center the title block */
+}
+
+.view-more-button {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 20px; /* Space above the button */
+  margin-bottom: 40px; /* Space below the button */
+  transition: background-color 0.3s ease;
+}
+
+.view-more-button:hover {
+  background-color: #333; /* Darken on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .top-section {
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center; /* Center stacked columns */
+  }
+
+  .left-column {
+    max-width: 100%; /* Allow left column to take full width */
+    margin-bottom: 20px; /* Add space below left column */
+  }
+
+  .right-column {
+    flex: none; /* Remove flex growth */
+    width: 100%; /* Allow right column to take full width */
+    max-width: 600px; /* Limit max width */
+    padding: 15px;
+  }
+
+  .pregnancy-progress {
+    width: 400px; /* Adjust size of progress circle container */
+    height: 400px;
+  }
+
+  .progress-text {
+    width: 300px; /* Adjust size of text container */
+    height: 300px;
+    padding: 10px;
+  }
+
+  .tip-box {
+    right: 20px; /* Adjust position */
+    bottom: 20px;
+    max-width: 250px; /* Adjust max width */
+  }
+
+  .feeling-options {
+    gap: 15px; /* Reduce gap */
+    flex-wrap: wrap; /* Allow feeling boxes to wrap */
+    justify-content: center; /* Center feeling boxes when wrapped */
+  }
+
+  .feeling-box {
+    width: 200px; /* Adjust width for smaller screens */
+    padding: 20px 10px; /* Adjust padding */
+  }
+  
+}
+
+@media (max-width: 768px) {
+  .pregnancy-diary-page {
+    padding: 15px; /* Reduce overall padding */
+  }
+
+  .top-section {
+    gap: 15px; /* Reduce gap */
+  }
+
+  .right-column {
+    
+    max-width: 500px; /* Further limit max width */
+  }
+
+  .pregnancy-progress {
+    width: 300px; /* Further adjust size */
+    height: 300px;
+  }
+
+  .progress-text {
+    width: 220px; /* Further adjust size */
+    height: 220px;
+    font-size: 1.5em; /* Reduce font size */
+  }
+
+  .weeks {
+    font-size: 1em; /* Reduce font size */
+  }
+
+  .days {
+    font-size: 0.6em; /* Reduce font size */
+  }
+
+  .tip-box {
+    right: 10px; /* Adjust position */
+    bottom: 10px;
+    max-width: 200px; /* Further adjust max width */
+    padding: 10px; /* Reduce padding */
+    font-size: 0.8em; /* Reduce font size */
+  }
+
+  .feelings-title {
+    font-size: 1.3em; /* Reduce font size */
+  }
+
+  .feeling-options {
+    gap: 10px; /* Further reduce gap */
+  }
+
+  .feeling-box {
+    width: 180px; /* Further adjust width */
+    padding: 15px 10px; /* Further adjust padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .pregnancy-diary-page {
+    padding: 10px; /* Further reduce overall padding */
+  }
+
+  .left-column {
+    padding: 15px; /* Adjust padding */
+  }
+
+  .month-nav {
+    font-size: 1em; /* Reduce font size */
+  }
+
+  .event-item {
+    flex-direction: column; /* Stack event items vertically */
+    align-items: flex-start; /* Align items to start */
+  }
+
+  .action-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px;
+  }
+
+  .add-button, .edit-button, .edit-profile-button, .tip-button {
+    width: 100%; /* Make buttons full width */
+    text-align: center; /* Center text in buttons */
+  }
+
+  .user-name {
+    font-size: 1.3em; /* Reduce font size */
+  }
+
+  .right-column {
+    max-width: 100%; /* Allow full width */
+    padding: 10px; /* Adjust padding */
+  }
+
+  .pregnancy-progress {
+    width: 250px; /* Further adjust size */
+    height: 250px;
+  }
+
+  .progress-circle-svg {
+    stroke-width: 8; /* Adjust stroke width */
+  }
+
+  .progress-text {
+    width: 180px; /* Further adjust size */
+    height: 180px;
+    font-size: 1.2em; /* Further reduce font size */
+  }
+
+  .tip-box {
+    position: static; /* Remove absolute positioning */
+    margin-top: 20px; /* Add space above tip box */
+    max-width: 100%; /* Allow full width */
+  }
+
+  .feelings-title {
+    font-size: 1.2em; /* Further reduce font size */
+  }
+
+  .feeling-options {
+    flex-direction: column; /* Stack feeling boxes vertically */
+    gap: 10px;
+  }
+
+  .feeling-box {
+    width: 90%; /* Adjust width */
+    max-width: 220px; /* Limit max width */
+    padding: 15px; /* Adjust padding */
+  }
+  
 } 
