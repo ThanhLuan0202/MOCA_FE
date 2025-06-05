@@ -1,0 +1,196 @@
+.user-pregnancy-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Adjust for header/footer */
+  background-color: #f8f8f8; /* Light background */
+  padding: 40px 20px;
+  background-image: url('../../assets/babauDrikMilk.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.user-pregnancy-form {
+  background-color: #fff;
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px; /* Adjust max-width as needed */
+}
+
+.user-pregnancy-form h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group .react-datepicker-wrapper input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fefefe;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #ff85da;
+    box-shadow: 0 0 5px rgba(255, 133, 218, 0.3);
+  }
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group .react-datepicker-wrapper .react-datepicker__input-container .icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.form-group .react-datepicker-wrapper .react-datepicker__input-container input[type="text"] {
+  padding-right: 40px;
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffB6E9;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #ff85da;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.error-message, .success-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-pregnancy-form {
+    padding: 30px 20px;
+  }
+
+  .user-pregnancy-form h1 {
+    font-size: 24px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group textarea,
+  .form-group .react-datepicker-wrapper input[type="text"] {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  button[type="submit"] {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-pregnancy-form {
+    padding: 20px 15px;
+  }
+
+  .user-pregnancy-form h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group textarea,
+  .form-group .react-datepicker-wrapper input[type="text"] {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+   .form-group .react-datepicker-wrapper .react-datepicker__input-container input[type="text"] {
+    padding-right: 35px;
+  }
+
+   .form-group .react-datepicker-wrapper .react-datepicker__input-container .icon {
+    right: 10px;
+    font-size: 16px;
+  }
+
+  button[type="submit"] {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .error-message, .success-message {
+    font-size: 12px;
+    padding: 10px;
+  }
+}

@@ -2,6 +2,18 @@ import apiClient from './api';
 import Cookies from 'js-cookie';
 
 const authService = {
+  // Đăng ký
+  register: async (userData) => {
+    try {
+      const response = await apiClient.post('/api/Authen/Register', userData);
+      console.log('Register Response:', response);
+      return response;
+    } catch (error) {
+      console.error('Register Error:', error);
+      throw error;
+    }
+  },
+
   // Đăng nhập
   login: async (email, password) => {
     try {

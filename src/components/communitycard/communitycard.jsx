@@ -16,7 +16,7 @@ const CommunityCardSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await apiClient.get('/community');
+        // const data = await apiClient.get('/community');
         setTestimonials(data);
       } catch (error) {
         console.error('Lỗi khi lấy dữ liệu testimonials:', error);

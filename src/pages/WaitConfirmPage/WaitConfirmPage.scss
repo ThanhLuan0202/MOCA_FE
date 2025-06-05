@@ -1,0 +1,81 @@
+.wait-confirm-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Adjust for header/footer if they exist */
+  text-align: center;
+  background-color: #f8f8f8; /* Light gray background from login/register */
+  padding: 40px 20px; /* Increased padding */
+}
+
+.wait-confirm-content {
+  background-color: #fff;
+  padding: 60px; /* Increased padding */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+  max-width: 500px;
+  width: 100%;
+}
+
+.message h2 {
+  color: #333; /* Dark text color */
+  margin-bottom: 20px; /* Increased margin */
+  font-size: 24px; /* Adjusted font size */
+}
+
+.message p {
+  color: #666; /* Gray text color */
+  margin-bottom: 30px; /* Increased margin */
+  font-size: 16px; /* Adjusted font size */
+}
+
+.message.verifying {
+  h2, p {
+    color: #ff85da; /* Pink/purple for verifying status */
+  }
+  /* Add a simple spinner or animation later if needed */
+}
+
+.message.success {
+  h2, p {
+    color: black; /* Keep green for success, or change to a project specific success color */
+    /* Example project green: #4CAF50 */
+  }
+}
+
+.login-link {
+  display: inline-block;
+  background-color: #ffB6E9; /* Pink button color */
+  color: white;
+  padding: 12px 28px; /* Adjusted padding */
+  border-radius: 25px; /* More rounded corners */
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
+
+  &:hover {
+    background-color: #ff85da; /* Darker pink on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+  }
+}
+
+/* Add responsive adjustments if necessary */
+@media (max-width: 480px) {
+  .wait-confirm-content {
+    padding: 30px; /* Adjusted padding for smaller screens */
+  }
+
+  .message h2 {
+    font-size: 20px;
+  }
+
+  .message p {
+    font-size: 14px;
+  }
+
+  .login-link {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+

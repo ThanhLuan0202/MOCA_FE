@@ -5,6 +5,10 @@ import LoginPage from "../pages/LoginPage/Login";
 import RegisterPage from "../pages/RegisterPage/Register";
 import PregnancyDiary from "../pages/PregnancyDiaryPage/pregnancyDiary";
 import ServicePage from "../pages/ServicePage/ServicePage";
+import WaitConfirmPage from "../pages/WaitConfirmPage/WaitConfirmPage";
+import BabyTrackingPage from "../pages/BabyTrackingPage/BabyTrackingPage";
+import UserpregnancyPage from '../pages/UserpregnancyPage/UserpregnancyPage';
+import PregnancyTrackingPage from '../pages/PregnancyTrackingPage/PregnancyTrackingPage';
 // import thêm các page khác nếu có
 
 const AppRoutes = () => {
@@ -17,6 +21,10 @@ const AppRoutes = () => {
       {/* Các routes khác */}
       <Route path="/services" element={<ServicePage />} />
       <Route path="/pregnancy-diary" element={<PregnancyDiary />} />
+      <Route path="/wait-confirm" element={<WaitConfirmPage />} />
+      <Route path="/baby-tracking" element={<BabyTrackingPage />} />
+      <Route path="/user-pregnancy" element={<UserpregnancyPage />} />
+      <Route path="/pregnancy-tracking" element={<PregnancyTrackingPage />} />
     </Routes>
   );
 };
