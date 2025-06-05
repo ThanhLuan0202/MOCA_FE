@@ -6,6 +6,10 @@ const PregnancyDiary = () => {
   const [currentWeek] = useState(12);
   const [currentDayOfWeek] = useState(3);
 
+  const [showAdvice, setShowAdvice] = useState(false);
+  const [advice, setAdvice] = useState("");
+  const [loadingAdvice, setLoadingAdvice] = useState(false);
+
   // Sample diary entries data
   const diaryEntries = [
     {
@@ -52,6 +56,29 @@ const PregnancyDiary = () => {
 
   const strokeDashoffset =
     (circumference * (100 - weekProgressPercentage)) / 100;
+
+  const handleAdviceClick = async () => {
+  setShowAdvice(true);
+  setLoadingAdvice(true);
+  try {
+    const res = await fetch("https://localhost:7066/api/Advice/advice", {
+      method: "POST",
+      credentials: "include", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+    setAdvice(data.advice || JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error(err);
+    setAdvice("Không thể lấy lời khuyên. Vui lòng thử lại sau.");
+  }
+  setLoadingAdvice(false);
+};
+
 
   return (
     <div className="pregnancy-diary-page">
@@ -121,10 +148,11 @@ const PregnancyDiary = () => {
             <div className="tip-box">
               <p>
                 {" "}
-                Để chăm sóc bé khỏe mạnh hãy đảm bảo chế độ dinh dưỡng lành
-                mạnh!
+                Để chăm sóc bé khỏe mạnh hãy đảm bảo chế độ dinh dưỡng lành mạnh!
               </p>
-              <button className="tip-button">Tham khảo</button>
+              <button className="tip-button" onClick={handleAdviceClick}>
+                Tham khảo
+              </button>
             </div>
           </div>
         </div>
@@ -162,6 +190,22 @@ const PregnancyDiary = () => {
             content={entry.content}
           />
         ))}
+
+        {showAdvice && (
+          <div className="advice-modal-overlay">
+            <div className="advice-modal">
+              <button className="close-btn" onClick={() => setShowAdvice(false)}>
+                ×
+              </button>
+              <h2>Lời khuyên cho mẹ bầu</h2>
+              {loadingAdvice ? (
+                <div className="loading">Đang tải...</div>
+              ) : (
+                <pre className="advice-content">{advice}</pre>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* View More button */}

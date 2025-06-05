@@ -281,6 +281,119 @@
   background-color: #333; /* Darken on hover */
 }
 
+/* New advice modal styles */
+.advice-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(60, 60, 60, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.advice-modal {
+  background: #fff7fa;
+  padding: 48px 38px 38px 38px;
+  border-radius: 18px;
+  max-width: 75%;
+  width: 98%;
+  min-height: 420px;      
+  max-height: 90vh;       
+  box-shadow: 0 8px 32px rgba(255, 182, 193, 0.18), 0 2px 8px rgba(0,0,0,0.07);
+  position: relative;
+  border: 2px solid #ffe0ec;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: #ffe0ec;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 22px;
+  color: #e5739a;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(255,182,193,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close-btn:hover {
+  background: #ffd6e6;
+  color: #c2185b;
+}
+
+.advice-modal h2 {
+  margin-top: 0;
+  color: #e5739a;
+  font-size: 1.35em;
+  text-align: center;
+  letter-spacing: 0.5px;
+  margin-bottom: 18px;
+}
+
+.advice-content {
+  white-space: pre-wrap;
+  font-size: 1.18em;
+  color: #444;
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px 18px;
+  box-shadow: 0 1px 4px rgba(255,182,193,0.07);
+  line-height: 1.6;
+  overflow-y: auto;
+  border: 1px solid #ffe0ec;
+  max-height: 60vh;       
+  min-height: 260px;      
+}
+
+.loading {
+  text-align: center;
+  color: #e5739a;
+  font-weight: 500;
+  font-size: 1.1em;
+  padding: 30px 0;
+  letter-spacing: 1px;
+}
+
+/* Nút Tham khảo nổi bật hơn */
+.tip-button {
+  background: linear-gradient(90deg, #ffb6c1 0%, #ffe0ec 100%);
+  color: #c2185b;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 22px;
+  font-size: 1.08em;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255,182,193,0.13);
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  margin-top: 12px;
+}
+.tip-button:hover {
+  background: linear-gradient(90deg, #ffe0ec 0%, #ffb6c1 100%);
+  color: #ad1457;
+  transform: translateY(-2px) scale(1.03);
+}
+
 /* Responsive styles */
 @media (max-width: 1024px) {
   .top-section {
@@ -450,12 +563,8 @@
   .feeling-options {
     flex-direction: column; /* Stack feeling boxes vertically */
     gap: 10px;
-  }
-
-  .feeling-box {
-    width: 90%; /* Adjust width */
     max-width: 220px; /* Limit max width */
     padding: 15px; /* Adjust padding */
   }
   
-} 
+}
