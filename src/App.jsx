@@ -15,8 +15,7 @@ function App() {
           <AppRoutes /> {/* Đây là nơi hiển thị các route */}
         </main>
         <Footer />
-      <ChatAI /> 
-
+        <ChatAI />
       </div>
     </AuthProvider>
   )

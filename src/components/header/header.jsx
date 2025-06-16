@@ -33,11 +33,11 @@ const Header = () => {
           <p>Dịch vụ</p>
         </Link>
 
-        <Link>
+        <Link to='/community'>
           <p>Cộng đồng</p>
         </Link>
 
-        <Link>
+        <Link to='/about-us'>
           <p>Chúng tôi</p>
         </Link>
       </div>

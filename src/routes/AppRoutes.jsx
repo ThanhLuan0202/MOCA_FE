@@ -9,6 +9,13 @@ import WaitConfirmPage from "../pages/WaitConfirmPage/WaitConfirmPage";
 import BabyTrackingPage from "../pages/BabyTrackingPage/BabyTrackingPage";
 import UserpregnancyPage from '../pages/UserpregnancyPage/UserpregnancyPage';
 import PregnancyTrackingPage from '../pages/PregnancyTrackingPage/PregnancyTrackingPage';
+import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import PaymentPage from '../pages/PaymentPage/PaymentPage';
+import CoachPage from '../pages/CoachPage/CoachPage';
+import ProfileCoach from '../pages/ProfileCoach/ProfileCoach';
+import BookingPage from "../pages/BookingPage/BookingPage";
+import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
+import CommunityPage from "../pages/CommunityPage/CommunityPage";
 // import thêm các page khác nếu có
 
 const AppRoutes = () => {
@@ -25,6 +32,14 @@ const AppRoutes = () => {
       <Route path="/baby-tracking" element={<BabyTrackingPage />} />
       <Route path="/user-pregnancy" element={<UserpregnancyPage />} />
       <Route path="/pregnancy-tracking" element={<PregnancyTrackingPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/coach" element={<CoachPage />} />
+      <Route path="/profile-coach" element={<ProfileCoach />} />
+      <Route path="/booking" element={<BookingPage />} />
+      <Route path="/About-us" element={<AboutUsPage />} />
+      <Route path="/Community" element={<CommunityPage />} />
+
     </Routes>
   );
 };

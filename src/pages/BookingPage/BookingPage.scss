@@ -1,0 +1,251 @@
+.booking-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+
+  .booking-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      font-size: 36px;
+      color: #ff69b4; /* Pink color from the image */
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+    }
+  }
+
+  .booking-form {
+    width: 100%;
+    max-width: 900px; /* Adjust based on image layout */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .card-section {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .form-group-row {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+
+        .form-group {
+          flex: 1;
+          min-width: 250px;
+
+          label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+          }
+
+          input[type="text"],
+          input[type="email"],
+          input[type="date"],
+          select,
+          textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            &:focus {
+              outline: none;
+              border-color: #ff69b4;
+            }
+          }
+
+          .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            .time-slot {
+              background-color: #eee;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              padding: 10px 15px;
+              cursor: pointer;
+              font-size: 14px;
+              &:hover {
+                background-color: #e0e0e0;
+              }
+              &.selected {
+                background-color: #ff69b4; /* Pink selected state */
+                color: #fff;
+                border-color: #ff69b4;
+              }
+            }
+          }
+
+          .sub-label {
+            font-size: 14px;
+            color: #999;
+            margin-top: -5px;
+            margin-bottom: 15px;
+          }
+
+          .doctor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+
+            .doctor-card {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              padding: 10px;
+              border: 1px solid #ddd;
+              border-radius: 10px;
+              cursor: pointer;
+              background-color: #fff;
+              transition: all 0.2s ease-in-out;
+
+              &:hover {
+                border-color: #ff69b4;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              }
+
+              &.selected {
+                border-color: #ff69b4;
+                box-shadow: 0 0 0 2px #ff69b4;
+              }
+
+              .doctor-avatar {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 8px;
+              }
+
+              span {
+                font-size: 14px;
+                text-align: center;
+                color: #333;
+              }
+            }
+          }
+
+          &.consultation-type {
+            div {
+              margin-bottom: 10px;
+            }
+            label {
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              input[type="radio"] {
+                margin-right: 10px;
+                accent-color: #ff69b4; /* Pink radio button */
+                width: 18px;
+                height: 18px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .submit-button {
+      background-color: #000; /* Black button */
+      color: #fff;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+
+      &:hover {
+        background-color: #333;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .booking-form {
+      padding: 0 10px;
+    }
+    .card-section {
+      padding: 20px;
+    }
+    .form-group-row {
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-group {
+      min-width: unset;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+    .booking-header {
+      h1 {
+        font-size: 28px;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
+    .card-section {
+      padding: 15px;
+    }
+    .form-group-row {
+      gap: 15px;
+    }
+    .form-group {
+      label {
+        font-size: 14px;
+      }
+      input,
+      select,
+      textarea {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+      .time-slots .time-slot {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+      .doctor-list {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+        .doctor-avatar {
+          width: 50px;
+          height: 50px;
+        }
+        span {
+          font-size: 12px;
+        }
+      }
+      &.consultation-type label input[type="radio"] {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .submit-button {
+      padding: 12px 20px;
+      font-size: 16px;
+    }
+  }
+} 

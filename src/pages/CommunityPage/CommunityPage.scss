@@ -1,0 +1,292 @@
+.community-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+
+  .community-header {
+    text-align: center;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 800px;
+
+    h1 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .share-input-container {
+      display: flex;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+      input {
+        flex: 1;
+        padding: 15px 25px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        &::placeholder {
+          color: #bbb;
+        }
+      }
+
+      button {
+        background-color: #000; /* Black button */
+        color: #fff;
+        border: none;
+        padding: 0 25px;
+        font-size: 24px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #333;
+        }
+      }
+    }
+  }
+
+  .community-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      padding: 10px 0;
+      position: relative;
+      transition: color 0.3s ease;
+
+      &.active {
+        color: #333;
+        font-weight: 600;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background-color: #ff69b4; /* Pink underline */
+        }
+      }
+
+      &:hover {
+        color: #555;
+      }
+    }
+  }
+
+  .community-posts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px; /* Adjust based on image layout */
+
+    .post-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      position: relative;
+
+      .quote-icon {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 36px;
+        
+        color: #ff69b4; /* Pink quote icon */
+        opacity: 0.2;
+      }
+
+      .post-content {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        padding-top: 40px; /* Space for quote icon */
+      }
+
+      .post-author-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .author-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .author-details {
+          display: flex;
+          flex-direction: column;
+
+          .author-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+          }
+
+          .author-role {
+            font-size: 13px;
+            color: #999;
+          }
+        }
+
+        .email-icon {
+          margin-left: auto;
+          color: #999;
+          font-size: 20px;
+          cursor: pointer;
+          &:hover {
+            color: #ff69b4;
+          }
+        }
+      }
+    }
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+
+    .community-header {
+      h1 {
+        font-size: 30px;
+      }
+      p {
+        font-size: 16px;
+      }
+      .share-input-container {
+        input {
+          padding: 12px 20px;
+          font-size: 14px;
+        }
+        button {
+          padding: 0 20px;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .community-tabs {
+      gap: 20px;
+      button {
+        font-size: 16px;
+      }
+    }
+
+    .community-posts {
+      padding: 0 10px;
+      .post-card {
+        padding: 25px;
+        .quote-icon {
+          font-size: 30px;
+        }
+        .post-content {
+          font-size: 15px;
+          padding-top: 15px;
+        }
+        .post-author-info {
+          .author-avatar {
+            width: 35px;
+            height: 35px;
+          }
+          .author-name {
+            font-size: 14px;
+          }
+          .author-role {
+            font-size: 12px;
+          }
+          .email-icon {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px 10px;
+
+    .community-header {
+      h1 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 14px;
+      }
+      .share-input-container {
+        input {
+          padding: 10px 15px;
+          font-size: 13px;
+        }
+        button {
+          padding: 0 15px;
+          font-size: 18px;
+        }
+      }
+    }
+
+    .community-tabs {
+      gap: 15px;
+      button {
+        font-size: 14px;
+        padding: 8px 0;
+      }
+    }
+
+    .community-posts {
+      .post-card {
+        padding: 20px;
+        .quote-icon {
+          font-size: 25px;
+          top: 15px;
+          left: 15px;
+        }
+        .post-content {
+          font-size: 14px;
+          padding-top: 10px;
+        }
+        .post-author-info {
+          .author-avatar {
+            width: 30px;
+            height: 30px;
+          }
+          .author-name {
+            font-size: 13px;
+          }
+          .author-role {
+            font-size: 11px;
+          }
+          .email-icon {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
