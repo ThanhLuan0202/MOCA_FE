@@ -1,60 +1,71 @@
 .search-bar-container {
   display: flex;
   align-items: center;
-  gap: 15px; /* Space between search bar and button */
-  margin: 40px auto; /* Center the container */
-  max-width: 600px; /* Increase the width */
-  width: 100%; /* Ensure it tries to take full width */
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
 }
 
 .search-input-wrapper {
   position: relative;
-  flex-grow: 1; /* Allow input to take available space */
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-grow: 1;
+  height: 45px;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 15px 10px 40px; /* Corrected padding */
-  border: 1px solid #ff85da; /* Pink border */
-  border-radius: 25px; /* Rounded shape */
-  font-size: 1em;
-  outline: none; /* Remove default outline */
-  transition: border-color 0.3s ease;
+  height: 100%;
+  padding: 8px 40px 8px 45px;
+  border: 2px solid #E8ECF4;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #1A1D1F;
+  background: #fff;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #9A9FA5;
+  }
 
   &:focus {
-    border-color: #ff66cc; /* Darker pink on focus */
+    outline: none;
+    border-color: #E8ECF4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 }
 
 .search-icon {
   position: absolute;
-  left: 15px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: #888; /* Icon color */
+  color: #9A9FA5;
+  font-size: 18px;
 }
 
 .search-button {
-  width: 40px; /* Circular button */
-  height: 40px;
-  background-color: black;
-  color: white;
+  width: 45px;
+  height: 45px;
+  background-color: #000;
   border: none;
-  border-radius: 50%; /* Make it round */
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 
   &:hover {
-    background-color: #333; /* Darken on hover */
+    background-color: #333;
+    transform: scale(1.05);
   }
 
-  /* Add an arrow icon if desired, e.g., using an SVG or icon font */
-  &::after {
-    content: "→"; /* Example arrow character */
-    font-size: 1.2em;
+  .arrow-icon {
+    color: #fff;
+    font-size: 18px;
   }
 }

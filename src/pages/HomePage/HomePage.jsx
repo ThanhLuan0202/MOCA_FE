@@ -84,7 +84,7 @@ const HomePage = () => {
         </div>
         <div style={{ padding: '0px' }}>
       <CardSlider />
-      <CommunityCardSection/>
+      {/* <CommunityCardSection/> */}
       <CardMemberSection/>
       <ContactFormSection/>
     </div>

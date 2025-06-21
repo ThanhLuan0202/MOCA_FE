@@ -31,10 +31,31 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            await authService.login(formData.email, formData.password);
-            login(); // Update global auth state
-            navigate('/');
+            const response = await authService.login(formData.email, formData.password);
+            console.log('Response from authService.login in LoginPage:', response);
+            const token = response?.Token || response?.token; // Extract token from response
+            console.log('Extracted token in LoginPage:', token);
+
+            if (token) {
+                login(token); // Pass the token to AuthContext's login function
+                
+                // Get user role from token to determine redirect
+                const { roleId } = authService.getUserInfoFromToken(token);
+                console.log('User roleId after login:', roleId);
+                
+                // Redirect based on role
+                if (roleId === 1) {
+                    navigate('/admin-dashboard'); // Admin
+                } else if (roleId === 4) {
+                    navigate('/doctor'); // Doctor
+                } else {
+                    navigate('/'); // Default for other roles
+                }
+            } else {
+                throw new Error('No token received after login.');
+            }
         } catch (error) {
+            console.error('Login failed in LoginPage.jsx:', error);
             setError(error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
         } finally {
             setLoading(false);

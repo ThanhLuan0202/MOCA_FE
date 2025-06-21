@@ -1,8 +1,18 @@
 .card-course {
   width: 250px; /* Adjust width as needed */
-  border-radius: 10px; /* Rounded corners */
+  border-radius: 12px;
   overflow: hidden; /* Hide overflowing image */
   text-align: left; /* Align text to the left */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  background-color: #fff;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .card-image {
@@ -13,26 +23,42 @@
 }
 
 .card-content {
-  padding: 10px;
+  padding: 15px;
 
   .card-title {
     font-size: 1.1em; /* Adjust font size */
     color: #333; /* Dark text color */
-    margin-bottom: 5px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .card-description {
+    font-size: 0.9em;
+    color: #666;
+    margin: 8px 0;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.2em;
   }
 
   .price-info {
     display: flex;
     align-items: center;
     gap: 10px;
-
+    margin-top: 10px;
+    text-align: center;
     .discounted-price {
+      
       font-size: 18px; /* Adjust font size */
       font-weight: bold;
       color: black; /* Pink color for discounted price */
     }
 
     .original-price {
+      text-align: center;
       font-size: 0.9em; /* Smaller font size */
       color: #888; /* Lighter color */
       text-decoration: line-through; /* Strikethrough effect */

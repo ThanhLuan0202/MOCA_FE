@@ -15,10 +15,11 @@
 .cards-in-progress-section {
   margin-top: 40px; /* Space above this section */
   text-align: center;
+  margin-bottom: 50px;
 
   h2 {
     font-size: 1.8em; /* Adjust title font size */
-    margin-bottom: 60px; /* Space below title */
+    margin-bottom: 30px; /* Space below title */
   }
 
   .cards-list {
@@ -62,4 +63,17 @@
 
 .view-more-button:hover {
   background-color: #333; /* Darken on hover */
+}
+
+.no-courses-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+  margin: 40px 0;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 } 

@@ -1,16 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SearchBar.scss";
-// Assuming you might use a library like react-icons for the search icon
-// import { FaSearch } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    onSearch(searchTerm);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    onSearch(value);
+  };
+
   return (
     <div className="search-bar-container">
       <div className="search-input-wrapper">
-        {/* Add a search icon here, e.g., <FaSearch className="search-icon" /> */}
-        <input type="text" className="search-input" placeholder="Tìm kiếm" />
+        <input 
+          type="text" 
+          className="search-input" 
+          placeholder="Tìm kiếm..." 
+          value={searchTerm}
+          onChange={handleChange}
+        />
       </div>
-      <button className="search-button"></button>
+      <button 
+        type="button" 
+        className="search-button"
+        onClick={handleSearch}
+      >
+        <span className="arrow-icon">→</span>
+      </button>
     </div>
   );
 };

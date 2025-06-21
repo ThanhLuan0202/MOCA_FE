@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './communitycard.scss'; // Import the SCSS file
 import { FaQuoteLeft } from "react-icons/fa";
-import apiClient from '../../services/api';
+// import apiClient from '../../services/api'; // No longer needed if using fetch directly
 
 // Sample data (replace with API call later)
 // Removed sample data as we are fetching from API
@@ -16,8 +16,12 @@ const CommunityCardSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const data = await apiClient.get('/community');
-        setTestimonials(data);
+        const response = await fetch('https://moca.mom:2030/api/communitypost');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTestimonials(data.$values || []); // Assuming data is in $values array
       } catch (error) {
         console.error('Lỗi khi lấy dữ liệu testimonials:', error);
       }
@@ -40,15 +44,15 @@ const CommunityCardSection = () => {
         <h2>Cộng đồng chia sẻ dành cho các mẹ bầu</h2>
         <div className="cards-grid">
           {testimonials.slice(0, displayCount).map((card, index) => ( // Slice the array to display only up to displayCount
-            <div key={index} className="community-card">
+            <div key={card.id || index} className="community-card"> {/* Use card.id for key if available, else index */}
               <div className="quote-icon"><FaQuoteLeft />
               </div>
-              <p className="quote-text">{card.quote}</p>
+              <p className="quote-text">{card.content}</p>
               <div className="card-footer">
-                <img src={card.image} alt={card.name} className="avatar" />
+                <img src={card.imageUrl || 'https://via.placeholder.com/40'} alt="User Avatar" className="avatar" /> {/* Use card.imageUrl */}
                 <div className="author-info">
-                  <p className="author-name">{card.name}</p>
-                  <p className="author-title">{card.title}</p>
+                  <p className="author-name">User ID: {card.userId}</p> {/* Placeholder for author name */}
+                  <p className="author-title">Community Member</p> {/* Placeholder for author title */}
                 </div>
               </div>
             </div>

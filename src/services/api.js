@@ -1,9 +1,8 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 // Tạo instance axios với cấu hình mặc định
 const api = axios.create({
-  baseURL: 'https://localhost:7066/',
+  baseURL: '/',
   timeout: 10000,
   headers: {
     
@@ -16,7 +15,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Thêm token vào header nếu cần
-    const token = Cookies.get('token');
+    const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -38,7 +37,7 @@ api.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // Xử lý lỗi unauthorized
-          Cookies.remove('token');
+          localStorage.removeItem('authToken');
           localStorage.removeItem('user');
         //   window.location.href = '/login';
           break;
@@ -64,6 +63,7 @@ const apiClient = {
   // Lấy danh sách
   get: async (url) => {
     const response = await api.get(url);
+    console.log("Axios API Client GET Response:", response);
     return response.data;
   },
 

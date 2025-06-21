@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-.pregnancy-tracking-section {
+.user-pregnancy-form-section {
   min-height: calc(100vh - var(--header-height, 0px));
-  background: linear-gradient(135deg, #e6f7ff 0%, #f0f8ff 100%);
+  background: linear-gradient(135deg, #e0f2f7 0%, #ebf8ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,10 +12,10 @@
   position: relative;
 }
 
-.pregnancy-tracking-section .form-container {
+.user-pregnancy-form-section .form-container {
   background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(70, 130, 180, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(100, 181, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 2.5rem 2rem;
   max-width: 600px;
   width: 100%;
@@ -27,7 +27,7 @@
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(70, 130, 180, 0.2), 0 6px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 15px 40px rgba(100, 181, 246, 0.2), 0 6px 15px rgba(0, 0, 0, 0.08);
   }
 
   &::before {
@@ -37,12 +37,12 @@
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(90deg, #64b5f6, #42a5f5, #64b5f6);
+    background: linear-gradient(90deg, #64b5f6, #2196f3, #64b5f6);
     border-radius: 20px 20px 0 0;
   }
 
   h2 {
-    color: #42a5f5;
+    color: #2196f3;
     font-size: 2.2rem;
     font-weight: 700;
     text-align: center;
@@ -65,7 +65,7 @@
   }
 }
 
-.pregnancy-tracking-section .form-group {
+.user-pregnancy-form-section .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
 
@@ -93,8 +93,8 @@
 
     &:focus {
       outline: none;
-      border-color: #42a5f5;
-      box-shadow: 0 0 5px rgba(66, 165, 245, 0.3);
+      border-color: #2196f3;
+      box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
     }
   }
 
@@ -108,8 +108,8 @@
   }
 }
 
-.pregnancy-tracking-section .submit-button {
-  background: linear-gradient(45deg, #42a5f5, #64b5f6);
+.user-pregnancy-form-section .submit-button {
+  background: linear-gradient(45deg, #2196f3, #64b5f6);
   color: white;
   border: none;
   border-radius: 10px;
@@ -118,17 +118,17 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(66, 165, 245, 0.25);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.25);
 
   &:hover {
-    background: linear-gradient(45deg, #64b5f6, #42a5f5);
+    background: linear-gradient(45deg, #64b5f6, #2196f3);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(66, 165, 245, 0.35);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.35);
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(66, 165, 245, 0.2);
+    box-shadow: 0 2px 10px rgba(33, 150, 243, 0.2);
   }
 
   &:disabled {
@@ -141,11 +141,11 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-  .pregnancy-tracking-section {
+  .user-pregnancy-form-section {
     padding: 2rem 1rem;
   }
 
-  .pregnancy-tracking-section .form-container {
+  .user-pregnancy-form-section .form-container {
     padding: 2rem 1.2rem;
     border-radius: 15px;
 
@@ -159,22 +159,22 @@
     }
   }
 
-  .pregnancy-tracking-section .form-group {
+  .user-pregnancy-form-section .form-group {
     margin-bottom: 1.2rem;
   }
 
-  .pregnancy-tracking-section .submit-button {
+  .user-pregnancy-form-section .submit-button {
     padding: 0.7rem 1.2rem;
     font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .pregnancy-tracking-section {
+  .user-pregnancy-form-section {
     padding: 1.5rem 0.8rem;
   }
 
-  .pregnancy-tracking-section .form-container {
+  .user-pregnancy-form-section .form-container {
     padding: 1.5rem 0.8rem;
     border-radius: 12px;
 
@@ -187,4 +187,4 @@
       }
     }
   }
-}
+} 

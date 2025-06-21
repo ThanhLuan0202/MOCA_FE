@@ -236,3 +236,47 @@ input[type="email"]:focus {
     max-width: 100%;
   }
 }
+
+.discount-input-group {
+  .input-with-button {
+    display: flex;
+    gap: 10px;
+
+    input {
+      flex-grow: 1;
+    }
+
+    .apply-discount-btn {
+      padding: 10px 15px;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:hover {
+        background-color: #ff2d55;
+      }
+    }
+  }
+
+  .discount-error-message {
+    color: red;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  .applied-voucher-info {
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+
+    p {
+      margin: 0;
+      padding: 2px 0;
+    }
+  }
+}

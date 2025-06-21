@@ -1,0 +1,529 @@
+/* MOCA_FE/src/pages/CourseDetailPage/CourseDetailPage.scss */
+
+.course-detail-page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  color: #333;
+
+  .course-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 60px;
+    align-items: center;
+
+    .course-image {
+      flex: 1 1 450px;
+      max-width: 550px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-info {
+      flex: 1 1 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .course-title {
+        font-size: 3.2em;
+        color: black;
+        margin-bottom: 15px;
+        line-height: 1.2;
+        font-weight: 600;
+      }
+
+      .course-price {
+        font-size: 18px;
+        color: black;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      
+      .enroll-button {
+        background-color: black;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-align: center;
+        text-decoration: none !important;
+
+        &:hover {
+          background-color: #ff2d55;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .overview-button {
+    display: block;
+    width: fit-content;
+    margin: 40px auto 30px auto;
+    background-color: black;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      background-color: #ff2d55;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .course-overview-section {
+    margin-top: 40px;
+    padding: 35px 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      font-size: 2.2em;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    p {
+      font-size: 1.05em;
+      line-height: 1.7;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  }
+
+  .course-description {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+    h2 {
+      font-size: 2.5em;
+      color: #2c3e50;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.15em;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 15px;
+    }
+  }
+
+  // Styles for Chapters and Lessons
+  .chapter-item {
+    margin-bottom: 30px;
+    padding: 20px 25px;
+    background-color: #fcfcfc;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+    h4 {
+      font-size: 25px;
+      color: black;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .lessons-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+
+      .lesson-item {
+        font-size: 1.05em;
+        line-height: 1.6;
+        color: #333;
+        padding: 12px 0;
+        border-bottom: 1px dashed #e9e9e9;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .lesson-content {
+          margin-top: 8px;
+          margin-bottom: 8px;
+          font-size: 0.95em;
+          color: #777;
+          line-height: 1.5;
+        }
+
+        .lesson-video-embed {
+          margin-top: 15px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+
+  // Basic responsiveness
+  @media (max-width: 992px) {
+    .course-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      .course-image {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .course-info {
+        margin-top: 30px;
+      }
+    }
+
+    .course-title {
+      font-size: 2.8em;
+    }
+
+    .course-price {
+      font-size: 1.8em;
+    }
+
+    .enroll-button {
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+
+    .overview-button {
+      padding: 12px 25px;
+      font-size: 1.1em;
+    }
+
+    .course-description,
+    .course-overview-section {
+      padding: 20px;
+
+      h2,
+      h3 {
+        font-size: 2em;
+      }
+
+      p,
+      li {
+        font-size: 1em;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 20px 15px;
+
+    .course-title {
+      font-size: 2.2em;
+    }
+
+    .course-price {
+      font-size: 1.5em;
+    }
+
+    .enroll-button {
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+
+    .overview-button {
+      padding: 10px 20px;
+      font-size: 1em;
+    }
+
+    .course-description,
+    .course-overview-section {
+      h2,
+      h3 {
+        font-size: 1.8em;
+      }
+
+      p,
+      li {
+        font-size: 0.95em;
+      }
+    }
+  }
+
+  .lesson-video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+    height: 0;
+    overflow: hidden;
+    margin-top: 15px; /* Add some space above the video */
+    margin-bottom: 20px;
+    border-radius: 8px; /* Slightly rounded corners for the video frame */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+  }
+
+  /* Feedback Section - Ensures single column layout */
+  .feedback-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+
+    h2,
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .feedback-list {
+        display: block; /* Ensures items stack vertically */
+        margin-bottom: 30px;
+        /* Remove grid-template-columns and gap if they were present */
+    }
+
+    .feedback-item {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+        width: 100%; /* Ensures each item takes full available width */
+        margin-bottom: 20px; /* Adds vertical spacing between feedback items */
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+            position: relative;
+
+            .user-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #eee;
+                flex-shrink: 0;
+            }
+
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+              
+                .username {
+                    font-weight: 700;
+                    color: #2c3e50;
+                    font-size: 1.1em;
+                    margin-bottom: 2px;
+                }
+
+                .rating-date {
+                    display: flex;
+                    flex-direction: column; /* Explicitly stack stars and date vertically */
+                    align-items: flex-start; /* Align contents to the left */
+                    gap: 5px; /* Space between stars and date */
+                }
+
+                .stars {
+                    display: flex; /* Keeps stars themselves in a row */
+                    gap: 2px; /* Space between individual stars */
+                    color: #e74c3c; /* Red color for stars */
+                    font-size: 15px; /* Keeps stars at 15px, as per your last change */
+                    letter-spacing: 0;
+                }
+
+                .date {
+                    color: #888;
+                    font-size: 15px;
+                    opacity: 1;
+                    margin-bottom: 0;
+                }
+            }
+
+            .options-button {
+                background: none;
+                border: none;
+                font-size: 1.5em;
+                color: #888;
+                cursor: pointer;
+                padding: 5px;
+                border-radius: 50%;
+                transition: background-color 0.2s ease;
+                flex-shrink: 0;
+
+                &:hover {
+                    background-color: #f0f0f0;
+                }
+            }
+        }
+
+        .comment-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .feedback-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+
+            .likes {
+                font-size: 1em;
+                color: #666;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+        }
+    }
+
+    .feedback-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+        h3 {
+            color: #000;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: 600;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+
+            &:focus {
+                border-color: #cf70b3;
+                box-shadow: 0 0 0 3px rgba(207, 112, 179, 0.1);
+                outline: none;
+            }
+        }
+
+        textarea {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+
+            &:focus {
+                border-color: #cf70b3;
+                box-shadow: 0 0 0 3px rgba(207, 112, 179, 0.1);
+                outline: none;
+            }
+        }
+
+        button[type="submit"] {
+            background-color: #000;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+
+            &:hover {
+                background-color: #ff2d55;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(207, 112, 179, 0.2);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 0;
+        }
+    }
+  }
+}

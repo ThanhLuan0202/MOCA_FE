@@ -16,6 +16,16 @@ import ProfileCoach from '../pages/ProfileCoach/ProfileCoach';
 import BookingPage from "../pages/BookingPage/BookingPage";
 import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 import CommunityPage from "../pages/CommunityPage/CommunityPage";
+import CourseDetailPage from "../pages/CourseDetailPage/CourseDetailPage";
+import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import MomProfilePage from "../pages/MomProfilePage/MomProfilePage";
+import UserPregnancyFormPage from "../pages/UserPregnancyFormPage/UserPregnancyFormPage";
+import BabyCheckupsPage from "../pages/BabyCheckupsPage/BabyCheckupsPage";
+import MomRegister from "../pages/RegisterPage/MomRegister";
+import DoctorPage from '../pages/DoctorPage/DoctorPage';
+import { jwtDecode } from "jwt-decode";
+
 // import thêm các page khác nếu có
 
 const AppRoutes = () => {
@@ -23,6 +33,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/register/mom" element={<MomRegister />} />     
       <Route path="/" element={<HomePage />} />{" "}
       {/* Đảm bảo route trang chủ tồn tại */}
       {/* Các routes khác */}
@@ -37,9 +48,29 @@ const AppRoutes = () => {
       <Route path="/coach" element={<CoachPage />} />
       <Route path="/profile-coach" element={<ProfileCoach />} />
       <Route path="/booking" element={<BookingPage />} />
-      <Route path="/About-us" element={<AboutUsPage />} />
-      <Route path="/Community" element={<CommunityPage />} />
-
+      <Route path="/about-us" element={<AboutUsPage />} />
+      <Route path="/community" element={<CommunityPage />} />
+      <Route path="/course/:courseId" element={<CourseDetailPage />} />
+      <Route path="/mom-profile" element={<MomProfilePage />} />
+      <Route path="/user-pregnancy-form" element={<UserPregnancyFormPage />} />
+      <Route path="/pregnancy-tracking-form" element={<PregnancyTrackingPage />} />
+      <Route path="/baby-checkups-form" element={<BabyCheckupsPage />} />
+      <Route
+        path="/admin-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={[1]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor"
+        element={
+          <ProtectedRoute allowedRoles={[4]}>
+            <DoctorPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

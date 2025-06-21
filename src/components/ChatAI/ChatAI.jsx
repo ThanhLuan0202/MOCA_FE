@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import "./ChatAI.css"; 
 import { useAuth } from "../../contexts/AuthContext";
+import apiClient from "../../services/api";
 
 const ChatAI = () => {
   const [show, setShow] = useState(false);
@@ -17,10 +17,11 @@ const ChatAI = () => {
     setInput("");
 
     try {
-      const res = await axios.post("https://localhost:7066/api/Chat", { message: input });
-      const aiReply = { sender: "ai", text: res.data.reply };
+      const res = await apiClient.post("/api/Chat", { message: input });
+      const aiReply = { sender: "ai", text: res.reply || "Không nhận được phản hồi." };
       setMessages(prev => [...prev, aiReply]);
     } catch (err) {
+      console.error("ChatAI Error:", err);
       setMessages(prev => [...prev, { sender: "ai", text: "Xin lỗi, có lỗi xảy ra." }]);
     }
   };

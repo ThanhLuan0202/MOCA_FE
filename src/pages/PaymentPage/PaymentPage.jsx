@@ -2,9 +2,36 @@ import React, { useState } from "react";
 import "./PaymentPage.scss";
 import paypal from "../../assets/paypal.png";
 import momo from "../../assets/momo.png";
+import axios from "axios";
 
 const PaymentPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("momo");
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [discountError, setDiscountError] = useState("");
+
+  const handleApplyDiscount = async () => {
+    setDiscountError("");
+    setAppliedVoucher(null);
+    try {
+      const response = await axios.get("https://moca.mom:2030/api/Discount");
+      console.log("API Response Data:", response.data);
+      const discounts = response.data.$values;
+      console.log("Discounts array:", discounts);
+      const foundVoucher = discounts.find(
+        (discount) => discount.code === discountCode && discount.isActive
+      );
+
+      if (foundVoucher) {
+        setAppliedVoucher(foundVoucher);
+      } else {
+        setDiscountError("Invalid or inactive discount code.");
+      }
+    } catch (error) {
+      console.error("Error fetching discounts:", error);
+      setDiscountError("Failed to apply discount. Please try again later.");
+    }
+  };
 
   return (
     <div className="payment-page">
@@ -93,9 +120,35 @@ const PaymentPage = () => {
             <div className="package-desc">1 month</div>
             <div className="package-date">17/06/2025 - 17/06/2025</div>
           </div>
-          <div className="form-group">
+          <div className="form-group discount-input-group">
             <label htmlFor="discountCode">Discount code</label>
-            <input type="text" id="discountCode" placeholder="MOCAEXE2" />
+            <div className="input-with-button">
+              <input
+                type="text"
+                id="discountCode"
+                placeholder="MOCAEXE2"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+              />
+              <button
+                type="button"
+                className="apply-discount-btn"
+                onClick={handleApplyDiscount}
+              >
+                Apply
+              </button>
+            </div>
+            {discountError && (
+              <p className="discount-error-message">{discountError}</p>
+            )}
+            {appliedVoucher && (
+              <div className="applied-voucher-info">
+                <p>
+                  Voucher: {appliedVoucher.code} - {appliedVoucher.description}
+                </p>
+                <p>Value: {appliedVoucher.value}{appliedVoucher.discountType === 0 ? "%" : " VND"}</p>
+              </div>
+            )}
           </div>
           <div className="order-total-row">
             <span>Total</span>

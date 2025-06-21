@@ -25,12 +25,13 @@
 }
 
 .profile-avatar {
+  display: block;
+  margin: 0 auto 18px auto;
   width: 140px;
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
   border: none;
-  margin-bottom: 18px;
   box-shadow: none;
   transition: none;
 }

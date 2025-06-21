@@ -25,37 +25,120 @@
       margin-bottom: 30px;
     }
 
-    .share-input-container {
-      display: flex;
+    .share-container {
       width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 50px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
-      input {
-        flex: 1;
-        padding: 15px 25px;
-        border: none;
-        outline: none;
-        font-size: 16px;
-        &::placeholder {
-          color: #bbb;
+      .share-input-container {
+        display: flex;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        background-color: #fff;
+
+        input {
+          flex: 1;
+          padding: 15px 25px;
+          border: none;
+          outline: none;
+          font-size: 16px;
+          &::placeholder {
+            color: #bbb;
+          }
+
+          &:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+          }
+        }
+
+        .image-upload-label {
+          display: flex;
+          align-items: center;
+          padding: 0 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+          }
+
+          .upload-icon {
+            font-size: 20px;
+            color: #666;
+          }
+        }
+
+        button {
+          background-color: #000;
+          color: #fff;
+          border: none;
+          padding: 0 25px;
+          font-size: 24px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover:not(:disabled) {
+            background-color: #333;
+          }
+
+          &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+          }
         }
       }
 
-      button {
-        background-color: #000; /* Black button */
-        color: #fff;
-        border: none;
-        padding: 0 25px;
-        font-size: 24px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+      .image-preview {
+        margin-top: 15px;
+        position: relative;
+        display: inline-block;
+        border-radius: 10px;
+        overflow: hidden;
+        max-width: 200px;
 
-        &:hover {
-          background-color: #333;
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
         }
+
+        .remove-image {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          background-color: rgba(0, 0, 0, 0.5);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+          }
+        }
+      }
+
+      .error-message {
+        margin-top: 15px;
+        color: #e74c3c;
+        font-size: 14px;
+        background-color: #fdeaea;
+        padding: 10px 15px;
+        border-radius: 25px;
+        display: inline-block;
       }
     }
   }
@@ -86,12 +169,17 @@
           left: 0;
           width: 100%;
           height: 2px;
-          background-color: #ff69b4; /* Pink underline */
+          background-color: #ff69b4;
         }
       }
 
       &:hover {
         color: #555;
+      }
+
+      &:disabled {
+        color: #ccc;
+        cursor: not-allowed;
       }
     }
   }
@@ -101,7 +189,7 @@
     grid-template-columns: 1fr;
     gap: 20px;
     width: 100%;
-    max-width: 800px; /* Adjust based on image layout */
+    max-width: 800px;
 
     .post-card {
       background-color: #fff;
@@ -115,8 +203,7 @@
         top: 20px;
         left: 20px;
         font-size: 36px;
-        
-        color: #ff69b4; /* Pink quote icon */
+        color: #ff69b4;
         opacity: 0.2;
       }
 
@@ -125,13 +212,29 @@
         color: #333;
         line-height: 1.6;
         margin-bottom: 20px;
-        padding-top: 40px; /* Space for quote icon */
+        padding-top: 40px;
+      }
+
+      .post-image {
+        margin: 15px auto;
+        border-radius: 10px;
+        overflow: hidden;
+        max-width: 400px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+        }
       }
 
       .post-author-info {
         display: flex;
         align-items: center;
         gap: 15px;
+        margin-top: 20px;
 
         .author-avatar {
           width: 40px;
@@ -180,14 +283,25 @@
       p {
         font-size: 16px;
       }
-      .share-input-container {
-        input {
-          padding: 12px 20px;
-          font-size: 14px;
+      .share-container {
+        .share-input-container {
+          input {
+            padding: 12px 20px;
+            font-size: 14px;
+          }
+          .image-upload-label {
+            padding: 0 12px;
+            .upload-icon {
+              font-size: 18px;
+            }
+          }
+          button {
+            padding: 0 20px;
+            font-size: 20px;
+          }
         }
-        button {
-          padding: 0 20px;
-          font-size: 20px;
+        .image-preview {
+          max-width: 150px;
         }
       }
     }
@@ -209,6 +323,9 @@
         .post-content {
           font-size: 15px;
           padding-top: 15px;
+        }
+        .post-image {
+          margin: 10px 0;
         }
         .post-author-info {
           .author-avatar {
@@ -239,14 +356,29 @@
       p {
         font-size: 14px;
       }
-      .share-input-container {
-        input {
-          padding: 10px 15px;
-          font-size: 13px;
+      .share-container {
+        .share-input-container {
+          input {
+            padding: 10px 15px;
+            font-size: 13px;
+          }
+          .image-upload-label {
+            padding: 0 10px;
+            .upload-icon {
+              font-size: 16px;
+            }
+          }
+          button {
+            padding: 0 15px;
+            font-size: 18px;
+          }
         }
-        button {
-          padding: 0 15px;
-          font-size: 18px;
+        .image-preview {
+          max-width: 120px;
+        }
+        .error-message {
+          font-size: 12px;
+          padding: 8px 12px;
         }
       }
     }
@@ -270,6 +402,9 @@
         .post-content {
           font-size: 14px;
           padding-top: 10px;
+        }
+        .post-image {
+          margin: 8px 0;
         }
         .post-author-info {
           .author-avatar {
