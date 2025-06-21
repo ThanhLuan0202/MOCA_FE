@@ -30,9 +30,11 @@ const Header = () => {
           <Link to="/">
             <p>Home</p>
           </Link>
-          <Link to="/pregnancy-diary">
-            <p>Nhật ký thai kỳ</p>
-          </Link>
+          {!(isLoggedIn && currentUser?.roleId === 4) && (
+            <Link to="/pregnancy-diary">
+              <p>Nhật ký thai kỳ</p>
+            </Link>
+          )}
           <Link to="/services">
             <p>Dịch vụ</p>
           </Link>
@@ -44,26 +46,32 @@ const Header = () => {
           <Link to='/about-us'>
             <p>Chúng tôi</p>
           </Link>
-          <div
-            className={`register-dropdown ${showDropdown ? 'show' : ''}`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <p>Đăng ký</p>
+          {isLoggedIn && currentUser?.roleId === 4 ? (
+            <Link to="/doctor">
+              <p>Bác sĩ</p>
+            </Link>
+          ) : (
             <div
-              className="dropdown-menu"
+              className={`register-dropdown ${showDropdown ? 'show' : ''}`}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              style={{ display: showDropdown ? 'block' : 'none' }}
             >
-              <Link to="/register/mom">
-                <button>Đăng ký Mẹ bầu</button>
-              </Link>
-              <Link to="/register/doctor">
-                <button>Đăng ký Bác sĩ</button>
-              </Link>
+              <p>Đăng ký</p>
+              <div
+                className="dropdown-menu"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                style={{ display: showDropdown ? 'block' : 'none' }}
+              >
+                <Link to="/register/mom">
+                  <button>Đăng ký Mẹ bầu</button>
+                </Link>
+                <Link to="/register/doctor">
+                  <button>Đăng ký Bác sĩ</button>
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         {isLoggedIn ? (
           <div className="logged-in-icons">
