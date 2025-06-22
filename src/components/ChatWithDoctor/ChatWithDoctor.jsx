@@ -4,6 +4,7 @@ import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import axios from "axios";
 
 const API_BASE = "https://moca.mom:2030/api/ChatDoctor";
+const USER_API = "https://moca.mom:2030/api/User";
 
 const ChatWithDoctor = () => {
   const { currentUser: user, isLoggedIn } = useAuth();
@@ -14,6 +15,7 @@ const ChatWithDoctor = () => {
   const [newMessage, setNewMessage] = useState("");
   const [connection, setConnection] = useState(null);
   const messagesEndRef = useRef(null);
+  const [doctorProfiles, setDoctorProfiles] = useState({});
 
   // Fetch danh sách bác sĩ đã chat
   useEffect(() => {
@@ -89,6 +91,25 @@ const ChatWithDoctor = () => {
     }
   };
 
+  // Fetch profile bác sĩ nếu chưa có
+  const fetchDoctorProfile = async (doctorId) => {
+    if (!doctorId || doctorProfiles[doctorId]) return;
+    try {
+      const res = await axios.get(`${USER_API}/${doctorId}`);
+      setDoctorProfiles((prev) => ({ ...prev, [doctorId]: res.data }));
+    } catch {}
+  };
+
+  // Khi danh sách doctors thay đổi, fetch profile cho các doctor chưa có
+  useEffect(() => {
+    doctors.forEach((contact) => {
+      if (!contact.doctor && contact.doctorId) {
+        fetchDoctorProfile(contact.doctorId);
+      }
+    });
+    // eslint-disable-next-line
+  }, [doctors]);
+
   return (
     <div className="chat-with-doctor-container flex h-[80vh] border rounded shadow-lg">
       {/* Danh sách bác sĩ */}
@@ -97,24 +118,31 @@ const ChatWithDoctor = () => {
         {doctors.length === 0 ? (
           <div className="p-4 text-gray-500">Chưa có cuộc trò chuyện nào</div>
         ) : (
-          doctors.map((contact) => (
-            <div
-              key={contact.contactId}
-              className={`flex items-center gap-3 p-4 cursor-pointer transition-colors rounded-lg mb-2 mx-2 
-                ${selectedDoctor?.contactId === contact.contactId ? "bg-pink-100 border border-pink-300 shadow" : "hover:bg-gray-100"}`}
-              onClick={() => setSelectedDoctor(contact)}
-            >
-              <div className="w-12 h-12 bg-pink-200 flex items-center justify-center rounded-full text-xl font-bold text-white">
-                {contact.doctor?.name ? contact.doctor.name.charAt(0) : contact.doctorId}
+          doctors.map((contact) => {
+            const profile = doctorProfiles[contact.doctorId];
+            return (
+              <div
+                key={contact.contactId}
+                className={`flex items-center gap-3 p-4 cursor-pointer transition-colors rounded-lg mb-2 mx-2 
+                  ${selectedDoctor?.contactId === contact.contactId ? "bg-pink-100 border border-pink-300 shadow" : "hover:bg-gray-100"}`}
+                onClick={() => setSelectedDoctor(contact)}
+              >
+                <div className="w-12 h-12 bg-pink-200 flex items-center justify-center rounded-full text-xl font-bold text-white overflow-hidden">
+                  {profile?.image ? (
+                    <img src={profile.image} alt={profile.fullName} className="w-12 h-12 object-cover rounded-full" />
+                  ) : (
+                    contact.doctor?.name ? contact.doctor.name.charAt(0) : contact.doctorId
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-gray-800 text-base">
+                    {profile?.fullName || contact.doctor?.name || `Bác sĩ #${contact.doctorId}`}
+                  </span>
+                  <span className="text-xs text-gray-500">ID: {contact.doctorId}</span>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="font-semibold text-gray-800 text-base">
-                  {contact.doctor?.name || `Bác sĩ #${contact.doctorId}`}
-                </span>
-                <span className="text-xs text-gray-500">ID: {contact.doctorId}</span>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
       {/* Khung chat */}

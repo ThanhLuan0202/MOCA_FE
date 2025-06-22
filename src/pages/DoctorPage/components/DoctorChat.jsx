@@ -3,6 +3,9 @@ import { FaSearch, FaPaperPlane, FaCircle, FaRegPaperPlane } from 'react-icons/f
 import * as signalR from '@microsoft/signalr';
 import apiClient from '../../../services/api';
 import { useAuth } from "../../../contexts/AuthContext";
+import axios from "axios";
+
+const USER_API = "https://moca.mom:2030/api/User";
 
 const DoctorChat = () => {
   const { currentUser } = useAuth();
@@ -18,6 +21,7 @@ const DoctorChat = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [token, setToken] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [userProfiles, setUserProfiles] = useState({}); // Lưu cache profile user
 
   // Lấy doctorId khi mount
   useEffect(() => {
@@ -124,6 +128,25 @@ const DoctorChat = () => {
     }
   }, [selectedContactId, contacts]);
 
+  // Fetch profile user nếu chưa có
+  const fetchUserProfile = async (userId) => {
+    if (!userId || userProfiles[userId]) return;
+    try {
+      const res = await axios.get(`${USER_API}/${userId}`);
+      setUserProfiles((prev) => ({ ...prev, [userId]: res.data }));
+    } catch {}
+  };
+
+  // Khi danh sách contacts thay đổi, fetch profile cho các user chưa có
+  useEffect(() => {
+    contacts.forEach((contact) => {
+      if (!contact.user && contact.userId) {
+        fetchUserProfile(contact.userId);
+      }
+    });
+    // eslint-disable-next-line
+  }, [contacts]);
+
   console.log('Header currentUser:', currentUser);
   console.log('Messages state:', messages);
   console.log('Render messages:', messages);
@@ -139,23 +162,25 @@ const DoctorChat = () => {
         <div style={{flex: 1, overflowY: 'auto'}}>
           {loadingContacts ? <div style={{padding: 24, color: '#aaa'}}>Đang tải...</div> :
             contacts.length === 0 ? <div style={{padding: 24, color: '#aaa'}}>Không có cuộc trò chuyện</div> :
-            contacts.map(conv => (
-              <div
-                key={conv.contactId}
-                style={{
-                  display: 'flex', alignItems: 'center', padding: 14, cursor: 'pointer',
-                  background: conv.contactId === selectedContactId ? '#393a3b' : 'none', borderBottom: '1px solid #333'
-                }}
-                onClick={() => setSelectedContactId(conv.contactId)}
-              >
-                <img src={conv.avatar || 'https://randomuser.me/api/portraits/men/75.jpg'} alt={conv.fullName || 'User'} style={{width: 48, height: 48, borderRadius: '50%', marginRight: 14}} />
-                <div style={{flex: 1, overflow: 'hidden'}}>
-                  <div style={{fontWeight: 600, fontSize: 16, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{conv.fullName || conv.contactId}</div>
-                  <div style={{fontSize: 13, color: '#b0b3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{conv.lastMessage || ''}</div>
+            contacts.map(conv => {
+              const profile = userProfiles[conv.userId];
+              return (
+                <div
+                  key={conv.contactId}
+                  style={{
+                    display: 'flex', alignItems: 'center', padding: 14, cursor: 'pointer',
+                    background: conv.contactId === selectedContactId ? '#393a3b' : 'none', borderBottom: '1px solid #333'
+                  }}
+                  onClick={() => setSelectedContactId(conv.contactId)}
+                >
+                  <img src={profile?.image || 'https://randomuser.me/api/portraits/men/75.jpg'} alt={profile?.fullName || conv.userId} style={{width: 48, height: 48, borderRadius: '50%', marginRight: 14, objectFit: 'cover'}} />
+                  <div style={{flex: 1, overflow: 'hidden'}}>
+                    <div style={{fontWeight: 600, fontSize: 16, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{profile?.fullName || conv.userId}</div>
+                    <div style={{fontSize: 13, color: '#b0b3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{conv.lastMessage || ''}</div>
+                  </div>
                 </div>
-                {/* Có thể thêm badge unread ở đây nếu backend trả về */}
-              </div>
-            ))}
+              );
+            })}
         </div>
       </div>
       {/* RIGHT: Chat Area */}
@@ -163,13 +188,18 @@ const DoctorChat = () => {
         {selectedContact ? (
           <>
             {/* Header */}
-            <div style={{display: 'flex', alignItems: 'center', padding: '18px 24px', borderBottom: '1px solid #333', background: '#242526'}}>
-              <img src={selectedContact.avatar || 'https://randomuser.me/api/portraits/men/75.jpg'} alt={selectedContact.fullName || 'User'} style={{width: 40, height: 40, borderRadius: '50%', marginRight: 14}} />
-              <div style={{flex: 1}}>
-                <div style={{fontWeight: 600, fontSize: 17, color: '#fff'}}>{selectedContact.fullName || selectedContact.contactId}</div>
-                <div style={{fontSize: 13, color: '#44e36a', display: 'flex', alignItems: 'center', gap: 6}}><FaCircle style={{fontSize: 10}}/> Online</div>
-              </div>
-            </div>
+            {(() => {
+              const profile = userProfiles[selectedContact.userId];
+              return (
+                <div style={{display: 'flex', alignItems: 'center', padding: '18px 24px', borderBottom: '1px solid #333', background: '#242526'}}>
+                  <img src={profile?.image || 'https://randomuser.me/api/portraits/men/75.jpg'} alt={profile?.fullName || selectedContact.userId} style={{width: 40, height: 40, borderRadius: '50%', marginRight: 14, objectFit: 'cover'}} />
+                  <div style={{flex: 1}}>
+                    <div style={{fontWeight: 600, fontSize: 17, color: '#fff'}}>{profile?.fullName || selectedContact.userId}</div>
+                    <div style={{fontSize: 13, color: '#44e36a', display: 'flex', alignItems: 'center', gap: 6}}><FaCircle style={{fontSize: 10}}/> Online</div>
+                  </div>
+                </div>
+              );
+            })()}
             {/* Message Area */}
             <div style={{flex: 1, padding: 24, overflowY: 'auto', background: '#18191a', display: 'flex', flexDirection: 'column', gap: 12}}>
               {loadingMessages ? <div style={{color: '#aaa'}}>Đang tải tin nhắn...</div> :
