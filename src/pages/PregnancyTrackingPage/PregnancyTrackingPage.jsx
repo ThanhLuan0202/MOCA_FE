@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './PregnancyTrackingPage.scss';
@@ -7,15 +7,30 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt } from 'react-icons/fa';
 // import your API service here, e.g., import pregnancyTrackingService from '../../services/pregnancyTrackingService';
 
-const PregnancyTrackingPage = () => {
+const PregnancyTrackingPage = ({ pregnancyId, onClose }) => {
   const navigate = useNavigate();
+  const [userPregnancies, setUserPregnancies] = useState([]);
+  useEffect(() => {
+    axios.get('https://moca.mom:2030/api/UserPregnancies', { withCredentials: true })
+      .then(res => {
+        const values = res.data?.$values || [];
+        setUserPregnancies(values);
+      })
+      .catch(() => setUserPregnancies([]));
+  }, []);
   const [formData, setFormData] = useState({
+    pregnancyId: pregnancyId ? String(pregnancyId) : '',
     trackingDate: null,
     weekNumber: '',
     weight: '',
     bellySize: '',
     bloodPressure: '',
   });
+  useEffect(() => {
+    if (pregnancyId) {
+      setFormData(prev => ({ ...prev, pregnancyId: String(pregnancyId) }));
+    }
+  }, [pregnancyId]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -47,6 +62,7 @@ const PregnancyTrackingPage = () => {
     setLoading(true);
 
     const apiData = {
+      pregnancyId: parseInt(formData.pregnancyId),
       trackingDate: formData.trackingDate ? formData.trackingDate.toISOString().split('T')[0] : null,
       weekNumber: parseInt(formData.weekNumber),
       weight: parseFloat(formData.weight),
@@ -79,6 +95,25 @@ const PregnancyTrackingPage = () => {
       <div className="form-container">
         <h2>Theo Dõi Sức Khỏe Thai Kỳ</h2>
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="pregnancyId">Hành trình mang thai:</label>
+            <select
+              id="pregnancyId"
+              name="pregnancyId"
+              value={formData.pregnancyId}
+              onChange={handleChange}
+              required
+              disabled={!!pregnancyId}
+            >
+              <option value="">-- Chọn hành trình --</option>
+              {userPregnancies.map(p => (
+                <option key={p.pregnancyId} value={p.pregnancyId}>
+                  {new Date(p.startDate).toLocaleDateString()} - {new Date(p.dueDate).toLocaleDateString()}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="form-group">
             <label htmlFor="trackingDate">Ngày ghi chú:</label>
             <DatePicker

@@ -3,6 +3,10 @@ import "./pregnancyDiary.css";
 import Comment from "../../components/comment/comment";
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../services/api';
+import PregnancyTrackingPage from '../PregnancyTrackingPage/PregnancyTrackingPage';
+import CustomModal from '../../components/CustomModal';
+import TrackingFormPopup from '../../components/TrackingFormPopup';
+import BabyTrackingFormPopup from '../../components/BabyTrackingFormPopup';
 
 const PregnancyDiary = () => {
   const [showAdvice, setShowAdvice] = useState(false);
@@ -14,8 +18,8 @@ const PregnancyDiary = () => {
   // State cho dữ liệu API
   const [userPregnancies, setUserPregnancies] = useState([]);
   const [selectedPregnancyId, setSelectedPregnancyId] = useState(null);
-  const [allPregnancyTracking, setAllPregnancyTracking] = useState([]);
-  const [allBabyTracking, setAllBabyTracking] = useState([]);
+  const [pregnancyTracking, setPregnancyTracking] = useState([]);
+  const [babyTracking, setBabyTracking] = useState([]);
   const [loadingPregnancy, setLoadingPregnancy] = useState(true);
   const [diaryEntries, setDiaryEntries] = useState([]);
   const [showAllDiaryEntries, setShowAllDiaryEntries] = useState(false);
@@ -69,49 +73,27 @@ const PregnancyDiary = () => {
     fetchUserPregnancies();
   }, []);
 
-  // Lấy toàn bộ tracking mẹ và bé
+  // Khi chọn pregnancyId, gọi API lấy tracking mẹ và bé
   useEffect(() => {
-    const fetchAllTracking = async () => {
-      setLoadingPregnancy(true);
-      try {
-        const [momTrackingData, babyTrackingData] = await Promise.all([
-          apiClient.get("/api/PregnancyTracking"),
-          apiClient.get("/api/BabayTracking")
-        ]);
-        setAllPregnancyTracking(momTrackingData?.$values || []);
-        setAllBabyTracking(babyTrackingData?.$values || []);
-      } catch (err) {
-        console.error("Lỗi lấy dữ liệu tracking:", err);
-        setAllPregnancyTracking([]);
-        setAllBabyTracking([]);
-      }
-      setLoadingPregnancy(false);
-    };
-    fetchAllTracking();
-  }, []);
-
-  // Lọc dữ liệu theo pregnancyId đang chọn
-  const selectedPregnancy = userPregnancies.find(p => p.pregnancyId === selectedPregnancyId);
-  const pregnancyTracking = allPregnancyTracking.filter(t => t.pregnancyId === selectedPregnancyId);
-  const babyTracking = allBabyTracking.filter(t => t.pregnancyId === selectedPregnancyId);
-
-  // Lấy weekNumber mới nhất từ pregnancyTracking
-  const latestPregTracking = pregnancyTracking.length > 0
-    ? pregnancyTracking.reduce((latest, cur) => {
-        return new Date(cur.trackingDate || 0) > new Date(latest.trackingDate || 0) ? cur : latest;
-      }, pregnancyTracking[0])
-    : null;
-  const weekNumber = latestPregTracking?.weekNumber || 0;
-  const currentWeek = Math.floor(weekNumber / 7);
-  const currentDayOfWeek = weekNumber % 7;
-
-  // Helper to get latest tracking values
-  const getLatest = (arr, key) => {
-    if (!arr || arr.length === 0) return null;
-    // Sort by date descending
-    return arr.slice().sort((a, b) => new Date(b[key]) - new Date(a[key]))[0];
-  };
-  const latestBabyTracking = getLatest(babyTracking, "checkupDate");
+    if (!selectedPregnancyId) return;
+    setLoadingPregnancy(true);
+    Promise.all([
+      apiClient.get(`/api/PregnancyTracking/${selectedPregnancyId}`),
+      apiClient.get(`/api/BabayTracking/${selectedPregnancyId}`)
+    ])
+      .then(([momRes, babyRes]) => {
+        // Luôn convert về mảng
+        const momData = momRes?.$values ? momRes.$values : momRes ? [momRes] : [];
+        const babyData = babyRes?.$values ? babyRes.$values : babyRes ? [babyRes] : [];
+        setPregnancyTracking(momData);
+        setBabyTracking(babyData);
+      })
+      .catch(() => {
+        setPregnancyTracking([]);
+        setBabyTracking([]);
+      })
+      .finally(() => setLoadingPregnancy(false));
+  }, [selectedPregnancyId]);
 
   // Lấy nhật ký thai kỳ từ API khi vào trang
   useEffect(() => {
@@ -126,6 +108,19 @@ const PregnancyDiary = () => {
     };
     fetchDiaryEntries();
   }, []);
+
+  // Lấy thông tin thai kỳ đang chọn
+  const selectedPregnancy = userPregnancies.find(p => Number(p.pregnancyId) === Number(selectedPregnancyId));
+
+  // Lấy weekNumber mới nhất từ pregnancyTracking
+  const latestPregTracking = pregnancyTracking.length > 0
+    ? pregnancyTracking.reduce((latest, cur) => {
+        return new Date(cur.trackingDate || 0) > new Date(latest.trackingDate || 0) ? cur : latest;
+      }, pregnancyTracking[0])
+    : null;
+  const weekNumber = latestPregTracking?.weekNumber || 0;
+  const currentWeek = Math.floor(weekNumber / 7);
+  const currentDayOfWeek = weekNumber % 7;
 
   const weekProgressPercentage = (currentDayOfWeek / 7) * 100;
 
@@ -204,6 +199,9 @@ const PregnancyDiary = () => {
     }
   };
 
+  const [showTrackingModal, setShowTrackingModal] = useState(false);
+  const [showBabyTrackingModal, setShowBabyTrackingModal] = useState(false);
+
   return (
     <div className="pregnancy-diary-page">
       <div className="top-section">
@@ -266,6 +264,16 @@ const PregnancyDiary = () => {
                     </table>
                   </div>
                 ) : <div>Không có dữ liệu theo dõi mẹ</div>}
+                {/* Nút Ghi chép */}
+                <button className="add-tracking-btn gradient-btn" onClick={() => setShowTrackingModal(true)} style={{marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, fontSize: '1.08em', padding: '10px 22px', borderRadius: 8, border: 'none', boxShadow: '0 2px 8px #6a5af933', background: 'linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)', color: '#fff', cursor: 'pointer', transition: 'background 0.2s, box-shadow 0.2s, transform 0.1s'}} onMouseOver={e => {e.currentTarget.style.background='linear-gradient(90deg,#8f6aff 60%,#6a5af9 100%)';e.currentTarget.style.boxShadow='0 4px 16px #8f6aff33';e.currentTarget.style.transform='translateY(-2px) scale(1.03)';}} onMouseOut={e => {e.currentTarget.style.background='linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)';e.currentTarget.style.boxShadow='0 2px 8px #6a5af933';e.currentTarget.style.transform='none';}}>
+                  <span role="img" aria-label="notebook">📝</span> Ghi chép
+                </button>
+                {/* Popup modal ghi chép */}
+                {showTrackingModal && (
+                  <CustomModal title="Ghi chép theo dõi thai kỳ" onClose={() => setShowTrackingModal(false)}>
+                    <TrackingFormPopup pregnancyId={selectedPregnancyId} onClose={() => setShowTrackingModal(false)} />
+                  </CustomModal>
+                )}
               </div>
 
               {/* Theo dõi thai nhi (bé) */}
@@ -304,15 +312,15 @@ const PregnancyDiary = () => {
                     </table>
                   </div>
                 ) : <div>Không có dữ liệu theo dõi bé</div>}
-                {/* Popup chi tiết nhận xét bác sĩ */}
-                {showDoctorComment && (
-                  <div className="doctor-comment-modal-overlay">
-                    <div className="doctor-comment-modal">
-                      <button className="close-btn" onClick={() => setShowDoctorComment(false)}>×</button>
-                      <h4>Chi tiết nhận xét bác sĩ</h4>
-                      <div className="doctor-comment-content">{doctorCommentDetail}</div>
-                    </div>
-                  </div>
+                {/* Nút Ghi chép cho bé */}
+                <button className="add-tracking-btn gradient-btn" onClick={() => setShowBabyTrackingModal(true)} style={{marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, fontSize: '1.08em', padding: '10px 22px', borderRadius: 8, border: 'none', boxShadow: '0 2px 8px #6a5af933', background: 'linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)', color: '#fff', cursor: 'pointer', transition: 'background 0.2s, box-shadow 0.2s, transform 0.1s'}} onMouseOver={e => {e.currentTarget.style.background='linear-gradient(90deg,#8f6aff 60%,#6a5af9 100%)';e.currentTarget.style.boxShadow='0 4px 16px #8f6aff33';e.currentTarget.style.transform='translateY(-2px) scale(1.03)';}} onMouseOut={e => {e.currentTarget.style.background='linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)';e.currentTarget.style.boxShadow='0 2px 8px #6a5af933';e.currentTarget.style.transform='none';}}>
+                  <span role="img" aria-label="notebook">📝</span> Ghi chép
+                </button>
+                {/* Popup modal ghi chép bé */}
+                {showBabyTrackingModal && (
+                  <CustomModal title="Ghi chép theo dõi thai nhi" onClose={() => setShowBabyTrackingModal(false)}>
+                    <BabyTrackingFormPopup pregnancyId={selectedPregnancyId} onClose={() => setShowBabyTrackingModal(false)} />
+                  </CustomModal>
                 )}
               </div>
             </>

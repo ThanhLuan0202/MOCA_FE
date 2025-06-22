@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
@@ -7,7 +7,17 @@ import './BabyCheckupsPage.scss';
 
 const BabyCheckupsPage = () => {
   const navigate = useNavigate();
+  const [userPregnancies, setUserPregnancies] = useState([]);
+  useEffect(() => {
+    axios.get('https://moca.mom:2030/api/UserPregnancies', { withCredentials: true })
+      .then(res => {
+        const values = res.data?.$values || [];
+        setUserPregnancies(values);
+      })
+      .catch(() => setUserPregnancies([]));
+  }, []);
   const [formData, setFormData] = useState({
+    pregnancyId: '',
     checkupDate: null,
     fetalHeartRate: '',
     estimatedWeight: '',
@@ -36,6 +46,7 @@ const BabyCheckupsPage = () => {
     e.preventDefault();
 
     const apiData = {
+      pregnancyId: parseInt(formData.pregnancyId),
       checkupDate: formData.checkupDate ? formData.checkupDate.toISOString().split('T')[0] : null,
       fetalHeartRate: parseInt(formData.fetalHeartRate),
       estimatedWeight: parseFloat(formData.estimatedWeight),
@@ -69,6 +80,24 @@ const BabyCheckupsPage = () => {
       <div className="form-container">
         <h2>Thêm Thông Tin Khám Thai Nhi</h2>
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="pregnancyId">Hành trình mang thai:</label>
+            <select
+              id="pregnancyId"
+              name="pregnancyId"
+              value={formData.pregnancyId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">-- Chọn hành trình --</option>
+              {userPregnancies.map(p => (
+                <option key={p.pregnancyId} value={p.pregnancyId}>
+                  {new Date(p.startDate).toLocaleDateString()} - {new Date(p.dueDate).toLocaleDateString()}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="form-group">
             <label htmlFor="checkupDate">Ngày khám thai:</label>
             <DatePicker
