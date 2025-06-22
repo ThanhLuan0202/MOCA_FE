@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { FiLogOut } from 'react-icons/fi';
 import authService from '../../services/auth';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -79,6 +80,11 @@ const Header = () => {
               <IoMdNotificationsOutline className="icon" />
               <span className="notification-badge">3</span>
             </button>
+            {[3, 5].includes(currentUser?.roleId) && (
+              <button className="chat-doctor-button" onClick={() => navigate('/chat-doctor')} title="Chat với bác sĩ">
+                <FaRegPaperPlane className="icon" />
+              </button>
+            )}
             <Link to='/profile' className="user-avatar">
               <img src={currentUser?.image} alt="User Avatar" className="avatar-image" />
             </Link>

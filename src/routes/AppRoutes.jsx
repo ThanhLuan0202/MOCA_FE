@@ -25,6 +25,7 @@ import BabyCheckupsPage from "../pages/BabyCheckupsPage/BabyCheckupsPage";
 import MomRegister from "../pages/RegisterPage/MomRegister";
 import DoctorPage from '../pages/DoctorPage/DoctorPage';
 import { jwtDecode } from "jwt-decode";
+import UserDoctorChatPage from '../pages/UserDoctorChatPage/UserDoctorChatPage';
 
 // import thêm các page khác nếu có
 
@@ -55,6 +56,7 @@ const AppRoutes = () => {
       <Route path="/user-pregnancy-form" element={<UserPregnancyFormPage />} />
       <Route path="/pregnancy-tracking-form" element={<PregnancyTrackingPage />} />
       <Route path="/baby-checkups-form" element={<BabyCheckupsPage />} />
+      <Route path="/chat-doctor" element={<UserDoctorChatPage />} />
       <Route
         path="/admin-dashboard/*"
         element={

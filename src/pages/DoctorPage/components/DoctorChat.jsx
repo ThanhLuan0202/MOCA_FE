@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaSearch, FaPaperPlane, FaCircle } from 'react-icons/fa';
+import { FaSearch, FaPaperPlane, FaCircle, FaRegPaperPlane } from 'react-icons/fa';
 import * as signalR from '@microsoft/signalr';
 import apiClient from '../../../services/api';
+import { useAuth } from "../../../contexts/AuthContext";
 
 const DoctorChat = () => {
+  const { currentUser } = useAuth();
   const [doctorId, setDoctorId] = useState(null); // Thêm state doctorId
   const [contacts, setContacts] = useState([]); // Danh sách cuộc trò chuyện
   const [selectedContactId, setSelectedContactId] = useState(null);
@@ -13,6 +15,9 @@ const DoctorChat = () => {
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const messagesEndRef = useRef(null);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [token, setToken] = useState(null);
+  const [newMessage, setNewMessage] = useState('');
 
   // Lấy doctorId khi mount
   useEffect(() => {
@@ -48,18 +53,30 @@ const DoctorChat = () => {
 
   // Lấy lịch sử tin nhắn khi chọn contact
   useEffect(() => {
-    if (!selectedContactId || !doctorId) return;
+    if (!selectedContactId || !token) return;
     setLoadingMessages(true);
-    apiClient.get(`/api/Chat/messages/${selectedContactId}?doctorId=${doctorId}`)
-      .then(data => setMessages(data))
+    apiClient.get(`/api/ChatDoctor/messages/${selectedContactId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => {
+        console.log('Messages API full response:', res);
+        console.log('Messages API res.data:', res.data);
+        setMessages(res.data?.$values || res.$values || []);
+        console.log('Set messages:', res.data?.$values || res.$values || []);
+      })
       .catch(() => setMessages([]))
       .finally(() => setLoadingMessages(false));
-  }, [selectedContactId, doctorId]);
+  }, [selectedContactId, token]);
+
+  useEffect(() => {
+    console.log('selectedContactId changed:', selectedContactId);
+  }, [selectedContactId]);
 
   // Kết nối SignalR khi chọn contact
   useEffect(() => {
     if (!selectedContactId) return;
     const token = localStorage.getItem('authToken');
+    setToken(token);
     const conn = new signalR.HubConnectionBuilder()
       .withUrl('https://moca.mom:2030/chathub', {
         accessTokenFactory: () => token
@@ -89,14 +106,49 @@ const DoctorChat = () => {
   }, [messages]);
 
   // Gửi tin nhắn
-  const handleSend = () => {
-    if (!messageInput.trim() || !connection || !selectedContactId) return;
-    connection.invoke('SendMessage', selectedContactId, messageInput.trim());
-    setMessageInput('');
+  const handleSend = async () => {
+    if (!newMessage.trim() || !selectedContact) return;
+    try {
+      await apiClient.post(
+        `/api/ChatDoctor/messages`,
+        {
+          contactId: selectedContact.contactId,
+          messageText: newMessage,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // Fetch lại messages sau khi gửi
+      const res = await apiClient.get(`/api/ChatDoctor/messages/${selectedContact.contactId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log('Messages after send:', res, res.data, res.data?.$values);
+      if (res.data?.$values) {
+        setMessages(res.data.$values);
+      } else if (res.$values) {
+        setMessages(res.$values);
+      } else {
+        // Không set về rỗng nếu response không đúng
+        console.warn('Không lấy được messages sau khi gửi');
+      }
+      setNewMessage("");
+    } catch (err) {
+      alert("Gửi tin nhắn thất bại");
+    }
   };
 
   // Xác định tên, avatar, ... của contact đang chọn
-  const selectedContact = contacts.find(c => c.contactId === selectedContactId);
+  useEffect(() => {
+    if (selectedContactId) {
+      const contact = contacts.find(c => c.contactId === selectedContactId);
+      setSelectedContact(contact);
+    }
+  }, [selectedContactId, contacts]);
+
+  console.log('Header currentUser:', currentUser);
+  console.log('Messages state:', messages);
+  console.log('Render messages:', messages);
 
   return (
     <div style={{display: 'flex', height: '80vh', background: '#18191a', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.15)'}}>
@@ -174,18 +226,20 @@ const DoctorChat = () => {
                 type="text"
                 placeholder="Nhập tin nhắn..."
                 style={{flex: 1, border: 'none', background: '#3a3b3c', color: '#fff', borderRadius: 18, padding: '12px 18px', fontSize: 15, marginRight: 12}}
-                value={messageInput}
-                onChange={e => setMessageInput(e.target.value)}
+                value={newMessage}
+                onChange={e => setNewMessage(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
               />
-              <button
-                style={{background: 'linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)', color: '#fff', border: 'none', borderRadius: 18, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8}}
-                onClick={handleSend}
-                disabled={!messageInput.trim()}
-              >
-                <FaPaperPlane />
-                Gửi
-              </button>
+              {currentUser?.roleId === 3 || currentUser?.roleId === 5 ? (
+                <button
+                  style={{background: 'linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)', color: '#fff', border: 'none', borderRadius: 18, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8}}
+                  onClick={handleSend}
+                  disabled={!newMessage.trim()}
+                >
+                  <FaRegPaperPlane className="icon" />
+                  Gửi
+                </button>
+              ) : null}
             </div>
           </>
         ) : (
