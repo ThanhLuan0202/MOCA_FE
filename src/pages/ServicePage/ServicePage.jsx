@@ -78,37 +78,26 @@ const ServicePage = () => {
           'Content-Type': 'application/json',
           ...(token && { 'Authorization': `Bearer ${token}` })
         };
-        // Lấy danh sách các purchasedCourse của user (giữ lại API cũ để lấy danh sách id)
-        const response = await fetch(`https://moca.mom:2030/api/PurchasedCourse?userId=${currentUser.userId}`, { headers });
+        
+        // 1. Fetch all purchased course records
+        const response = await fetch(`https://moca.mom:2030/api/PurchasedCourse`, { headers });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        const purchasedCourseIds = data.$values ? data.$values.map(pc => pc.id || pc.purchasedId) : [];
+        const allPurchases = (await response.json()).$values || [];
 
-        // Gọi API mới lấy chi tiết từng purchasedCourse
-        const purchasedCourseDetailsPromises = purchasedCourseIds.map(async (id) => {
-          try {
-            const purchasedCourseResponse = await fetch(`https://moca.mom:2030/api/PurchasedCourse/${id}`, { headers });
-            if (!purchasedCourseResponse.ok) {
-              throw new Error(`HTTP error! status: ${purchasedCourseResponse.status}`);
-            }
-            return purchasedCourseResponse.json();
-          } catch (detailError) {
-            console.error(`Error fetching purchased course ${id}:`, detailError);
-            return null;
-          }
-        });
+        // 2. Filter records for the current user
+        const userPurchases = allPurchases.filter(p => String(p.userId) === String(currentUser.userId));
 
-        const purchasedCoursesData = (await Promise.all(purchasedCourseDetailsPromises)).filter(Boolean);
-
-        // Fetch thêm thông tin chi tiết khóa học cho từng purchasedCourse
+        // 3. Fetch full course details for each purchased course
         const purchasedCoursesWithDetails = await Promise.all(
-          purchasedCoursesData.map(async (purchasedCourse) => {
+          userPurchases.map(async (purchasedCourse) => {
             try {
               const courseResponse = await fetch(`https://moca.mom:2030/api/Course/${purchasedCourse.courseId}`);
               if (!courseResponse.ok) {
-                throw new Error(`HTTP error! status: ${courseResponse.status}`);
+                // Log error but don't fail the whole process
+                console.error(`HTTP error! status: ${courseResponse.status} for courseId ${purchasedCourse.courseId}`);
+                return null; 
               }
               const courseData = await courseResponse.json();
               return {
@@ -117,17 +106,20 @@ const ServicePage = () => {
                 image: courseData.image,
                 price: courseData.price,
                 description: courseData.description,
-                // Thêm các trường khác nếu cần
               };
             } catch (error) {
               console.error(`Error fetching course details for courseId ${purchasedCourse.courseId}:`, error);
-              return purchasedCourse; // Trả về purchasedCourse nếu lỗi
+              return null; // Return null if a specific course fetch fails
             }
           })
         );
-        setPurchasedCourses(purchasedCoursesWithDetails);
+        
+        // Filter out any nulls from failed fetches and update state
+        setPurchasedCourses(purchasedCoursesWithDetails.filter(Boolean));
+
       } catch (error) {
         console.error("Error fetching purchased courses:", error);
+        setPurchasedCourses([]); // Reset on error
       }
     };
 

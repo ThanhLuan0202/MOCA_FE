@@ -166,25 +166,42 @@ const CourseDetailPage = () => {
 
         const fetchUserPurchasedCourses = async () => {
             if (!currentUserId) {
-                console.log('No currentUserId!');
+                setIsCoursePurchased(false);
                 return;
             }
             try {
+                const token = localStorage.getItem('authToken');
                 const headers = {
                     'Content-Type': 'application/json',
                     ...(token && { 'Authorization': `Bearer ${token}` })
                 };
-                const response = await fetch(`https://moca.mom:2030/api/PurchasedCourse?userId=${currentUserId}`, { headers });
+                
+                // Fetch ALL purchased courses, as the API does not seem to support filtering by userId
+                const response = await fetch(`https://moca.mom:2030/api/PurchasedCourse`, { headers });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                const purchasedCourseIds = data.$values ? data.$values.map(pc => pc.courseId) : [];
+
+                if (!data.$values || data.$values.length === 0) {
+                    setIsCoursePurchased(false);
+                    return;
+                }
+                
+                // Filter the purchases by the current user ID on the client-side
+                const userPurchases = data.$values.filter(pc => String(pc.userId) === String(currentUserId));
+                
+                // From the user's purchases, get the course IDs
+                const purchasedCourseIds = userPurchases.map(pc => pc.courseId);
+
+                // Check if the current course is in the list of purchased courses
                 const purchased = purchasedCourseIds.includes(parseInt(courseId));
                 setIsCoursePurchased(purchased);
-                console.log('Purchased course IDs:', purchasedCourseIds, 'Current courseId:', courseId, 'Purchased:', purchased);
+                console.log('Purchased course IDs for this user:', purchasedCourseIds, 'Current courseId:', courseId, 'Purchased:', purchased);
+
             } catch (err) {
                 console.error("Error fetching user's purchased courses:", err);
+                setIsCoursePurchased(false); // Set to false in case of any error
             }
         };
 
@@ -192,14 +209,11 @@ const CourseDetailPage = () => {
             fetchCourseDetails();
             fetchCourseContent();
             fetchFeedbacks();
-            fetchUserPurchasedCourses(); // Fetch purchased courses only if logged in
+            fetchUserPurchasedCourses(); // Fetch purchased courses
         }
 
-        // Check login status on component mount
-        if (isLoggedIn) {
-            fetchUserPurchasedCourses(); // Fetch purchased courses only if logged in
-        }
-    }, [courseId, isLoggedIn]);
+        // Không cần gọi lại fetchUserPurchasedCourses ở đây nữa
+    }, [courseId, isLoggedIn, currentUserId]); // Thêm currentUserId vào dependencies
 
     // Khi render feedback, nếu chưa có user, gọi fetchUser
     useEffect(() => {
@@ -210,6 +224,13 @@ const CourseDetailPage = () => {
         });
         // eslint-disable-next-line
     }, [feedbacks]);
+
+    // Reset isCoursePurchased khi người dùng đăng xuất
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setIsCoursePurchased(false);
+        }
+    }, [isLoggedIn]);
 
     const toggleChapter = (chapterId) => {
         setExpandedChapters(prev => ({
@@ -269,6 +290,9 @@ const CourseDetailPage = () => {
     // Tìm feedback của user hiện tại (nếu có)
     const userFeedback = feedbacks.find(fb => String(fb.userId) === String(currentUserId));
 
+    // Debug logging
+    console.log('Debug - isLoggedIn:', isLoggedIn, 'isCoursePurchased:', isCoursePurchased, 'currentUserId:', currentUserId);
+
     if (loading) {
         return <div className="course-detail-page">Loading course details...</div>;
     }
@@ -290,9 +314,17 @@ const CourseDetailPage = () => {
                     <p className="course-price">Price: {course.price}đ</p>
                     <p>Description: {course.description}</p>
                     {/* Add more course details here as needed from API response */}
-                    {isLoggedIn && !isCoursePurchased && (
+                    {!isLoggedIn ? (
+                        <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '20px' }}>
+                            <Link to='/login' className="enroll-button">Login to Enroll</Link>
+                        </div>
+                    ) : !isCoursePurchased ? (
                         <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '20px' }}>
                             <Link to='/payment' className="enroll-button">Enroll Now</Link>
+                        </div>
+                    ) : (
+                        <div >
+                            <span ></span>
                         </div>
                     )}
                 </div>
@@ -313,28 +345,56 @@ const CourseDetailPage = () => {
                                     <h4 style={{ margin: 0 }}>{chapter.orderIndex}. {chapter.title}</h4>
                                     <span style={{ marginLeft: '10px' }}>{expandedChapters[chapter.chapterId] ? '' : <FaCaretDown />}</span>
                                 </div>
-                                {isCoursePurchased && expandedChapters[chapter.chapterId] && lessons[chapter.chapterId] && lessons[chapter.chapterId].length > 0 && (
-                                    <ul className="lessons-list">
-                                        {lessons[chapter.chapterId].map(lesson => (
-                                            <li key={lesson.lessonId} className="lesson-item">
-                                                <p>{lesson.orderIndex}. {lesson.title} {lesson.duration ? `(${lesson.duration} mins)` : ''}</p>
-                                                {lesson.content && <p className="lesson-content">{lesson.content}</p>}
-                                                {lesson.videoURL && (
-                                                    <div className="lesson-video-embed">
-                                                        <iframe
-                                                            width="560"
-                                                            height="315"
-                                                            src={`https://www.youtube.com/embed/${lesson.videoURL.split('v=')[1]}`}
-                                                            frameBorder="0"
-                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                            allowFullScreen
-                                                            title={lesson.title}
-                                                        ></iframe>
-                                                    </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                {expandedChapters[chapter.chapterId] && (
+                                    isCoursePurchased ? (
+                                        lessons[chapter.chapterId] && lessons[chapter.chapterId].length > 0 ? (
+                                            <ul className="lessons-list">
+                                                {lessons[chapter.chapterId].map(lesson => (
+                                                    <li key={lesson.lessonId} className="lesson-item">
+                                                        <p>{lesson.orderIndex}. {lesson.title} {lesson.duration ? `(${lesson.duration} mins)` : ''}</p>
+                                                        {lesson.content && <p className="lesson-content">{lesson.content}</p>}
+                                                        {lesson.videoURL && (
+                                                            <div className="lesson-video-embed">
+                                                                <iframe
+                                                                    width="560"
+                                                                    height="315"
+                                                                    src={`https://www.youtube.com/embed/${lesson.videoURL.split('v=')[1]}`}
+                                                                    frameBorder="0"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                    allowFullScreen
+                                                                    title={lesson.title}
+                                                                ></iframe>
+                                                            </div>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p style={{ color: '#666', fontStyle: 'italic', padding: '10px 0' }}>No lessons available for this chapter.</p>
+                                        )
+                                    ) : (
+                                        <div style={{ 
+                                            padding: '20px', 
+                                            background: '#f8f9fa', 
+                                            borderRadius: '8px', 
+                                            margin: '10px 0',
+                                            textAlign: 'center',
+                                            border: '1px solid #e9ecef'
+                                        }}>
+                                            <p style={{ color: '#6c757d', margin: '0 0 10px 0' }}>
+                                                🔒 This content is locked. Please enroll in this course to access the lessons.
+                                            </p>
+                                            {!isLoggedIn ? (
+                                                <Link to='/login' className="enroll-button" style={{ display: 'inline-block', marginTop: '10px' }}>
+                                                    Login to Enroll
+                                                </Link>
+                                            ) : (
+                                                <Link to='/payment' className="enroll-button" style={{ display: 'inline-block', marginTop: '10px' }}>
+                                                    Enroll Now
+                                                </Link>
+                                            )}
+                                        </div>
+                                    )
                                 )}
                             </div>
                         ))
