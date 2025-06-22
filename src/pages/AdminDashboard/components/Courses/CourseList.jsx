@@ -86,9 +86,10 @@ const CourseList = ({ courses, onDelete, onEdit, categories }) => {
           <tbody>
             {filteredCourses.map((course) => {
               const category = categories?.find(cat => cat.categoryId === course.categoryId);
+              const courseId = course.$id || course.courseId;
               console.log(`Course: "${course.courseTitle}", categoryId: ${course.categoryId}, Found category:`, category);
               return (
-                <tr key={course.courseId}>
+                <tr key={courseId}>
                   <td>{course.courseTitle}</td>
                   <td className="category-cell">
                     <span className={`course-category-badge category-${(category?.name || '').toLowerCase()}`}>{category?.name || 'N/A'}</span>
@@ -130,7 +131,7 @@ const CourseList = ({ courses, onDelete, onEdit, categories }) => {
                     <button
                       className="action-btn edit"
                       title="Edit"
-                      onClick={() => onEdit(course.courseId)}
+                      onClick={() => onEdit(courseId)}
                     >
                       <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
                         <path
@@ -144,7 +145,7 @@ const CourseList = ({ courses, onDelete, onEdit, categories }) => {
                     <button
                       className="action-btn delete"
                       title="Delete"
-                      onClick={() => onDelete(course.courseId)}
+                      onClick={() => onDelete(courseId)}
                     >
                       <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
                         <path

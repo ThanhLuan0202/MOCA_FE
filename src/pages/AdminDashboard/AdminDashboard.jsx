@@ -42,8 +42,13 @@ const AdminDashboard = () => {
         ]);
 
         const coursesData = coursesRes.$values || [];
+        const categoriesData = categoriesRes.$values || [];
+        
+        console.log("Fetched courses data:", coursesData);
+        console.log("Fetched categories data:", categoriesData);
+        
         setCourses(coursesData);
-        setCategories(categoriesRes.$values || []);
+        setCategories(categoriesData);
 
         setStats({
             users: (usersRes.$values || []).length,
@@ -67,7 +72,7 @@ const AdminDashboard = () => {
         const recentCourses = (coursesData || [])
             .filter(course => course.createdAt && new Date(course.createdAt) > twentyFourHoursAgo)
             .map(course => ({
-                id: `course-${course.courseId}`,
+                id: `course-${course.$id || course.courseId}`,
                 text: `New course added: ${course.courseTitle}`,
                 time: new Date(course.createdAt),
                 status: 'info'
@@ -117,20 +122,81 @@ const AdminDashboard = () => {
   }, [isAdmin, isLoggedIn, isLoadingAuth]); // Add isLoadingAuth to dependencies
 
   const handleEditCourse = (courseId) => {
-    const courseToEdit = courses.find(c => c.courseId === courseId);
+    console.log("Attempting to edit course with ID:", courseId);
+    console.log("Available courses:", courses);
+    
+    const courseToEdit = courses.find(c => (c.$id || c.courseId) === courseId);
     if (courseToEdit) {
+      console.log("Found course to edit:", courseToEdit);
       setEditingCourse(courseToEdit);
       setIsEditModalOpen(true);
     } else {
       console.error(`Không thể tìm thấy khóa học với ID ${courseId}.`);
+      console.error("Available course IDs:", courses.map(c => c.$id || c.courseId));
+      alert(`Không thể tìm thấy khóa học với ID ${courseId}.`);
+    }
+  };
+
+  const verifyCourseExists = async (courseId) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`https://moca.mom:2030/api/Course/${courseId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      
+      if (response.ok) {
+        const courseData = await response.json();
+        console.log("Course exists on server:", courseData);
+        return true;
+      } else {
+        console.log(`Course with ID ${courseId} not found on server. Status: ${response.status}`);
+        return false;
+      }
+    } catch (error) {
+      console.error("Error verifying course existence:", error);
+      return false;
     }
   };
 
   const handleSaveCourse = async (updatedCourse) => {
     console.log("Data received from modal:", updatedCourse);
+    console.log("Categories available:", categories);
+    
     try {
+      // Determine the correct course ID to use
+      const courseIdToUse = updatedCourse.$id || updatedCourse.courseId;
+      
+      // Validate course data before sending
+      if (!courseIdToUse) {
+        alert("Lỗi: Không tìm thấy ID khóa học.");
+        return;
+      }
+      
       if (!updatedCourse.categoryId) {
         alert("Vui lòng chọn Category ID hợp lệ.");
+        return;
+      }
+      
+      // Verify that the category exists
+      const categoryExists = categories.find(cat => cat.categoryId === updatedCourse.categoryId);
+      if (!categoryExists) {
+        alert(`Lỗi: Không tìm thấy category với ID ${updatedCourse.categoryId}. Vui lòng chọn category khác.`);
+        return;
+      }
+      
+      // Verify that the course exists in our local state
+      const courseExists = courses.find(c => (c.$id || c.courseId) === courseIdToUse);
+      if (!courseExists) {
+        alert(`Lỗi: Không tìm thấy khóa học với ID ${courseIdToUse} trong danh sách.`);
+        return;
+      }
+
+      // Verify that the course exists on the server
+      const courseExistsOnServer = await verifyCourseExists(courseIdToUse);
+      if (!courseExistsOnServer) {
+        alert(`Lỗi: Khóa học với ID ${courseIdToUse} không tồn tại trên server.`);
         return;
       }
   
@@ -141,20 +207,47 @@ const AdminDashboard = () => {
       formData.append('Image', updatedCourse.image || "");
       formData.append('CategoryId', updatedCourse.categoryId);
 
-      await apiClient.put(`/api/Course/${updatedCourse.courseId}`, formData, {
+      console.log("Sending PUT request to:", `/api/Course/${courseIdToUse}`);
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      // Try using direct fetch instead of apiClient
+      const token = localStorage.getItem('authToken');
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+      };
+
+      const response = await fetch(`https://moca.mom:2030/api/Course/${courseIdToUse}`, {
+        method: 'PUT',
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
         },
+        body: formData
       });
+
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response text:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
     
       setCourses(courses.map(c =>
-        c.courseId === updatedCourse.courseId 
+        (c.$id || c.courseId) === courseIdToUse
           ? { ...c, ...updatedCourse } // Merge changes to preserve all fields
           : c
       ));
       
       const newActivity = {
-        id: `update-course-${updatedCourse.courseId}-${new Date().getTime()}`,
+        id: `update-course-${courseIdToUse}-${new Date().getTime()}`,
         text: `Course "${updatedCourse.courseTitle}" has been updated.`,
         time: new Date(),
         status: 'info'
@@ -166,8 +259,21 @@ const AdminDashboard = () => {
       alert("Cập nhật khóa học thành công!");
 
     } catch (error) {
-      console.error("Lỗi khi cập nhật:", error.response?.data || error);
-      alert("Cập nhật khóa học thất bại.");
+      console.error("Lỗi khi cập nhật:", error);
+      console.error("Error response:", error.response);
+      console.error("Error data:", error.response?.data);
+      
+      let errorMessage = "Cập nhật khóa học thất bại.";
+      
+      if (error.message.includes('404')) {
+        errorMessage = `Không tìm thấy khóa học với ID ${courseIdToUse} trên server.`;
+      } else if (error.message.includes('Category with Id')) {
+        errorMessage = `Lỗi category: ${error.message}`;
+      } else if (error.message) {
+        errorMessage = `Lỗi: ${error.message}`;
+      }
+      
+      alert(errorMessage);
     }
   };
   
@@ -175,9 +281,9 @@ const AdminDashboard = () => {
   const handleDeleteCourse = async (courseId) => {
     if (window.confirm(`Bạn có chắc muốn xóa khóa học ID: ${courseId}?`)) {
       try {
-        const courseToDelete = courses.find(c => c.courseId === courseId);
+        const courseToDelete = courses.find(c => (c.$id || c.courseId) === courseId);
         await apiClient.delete(`/api/Course/${courseId}`); // Assuming this endpoint exists
-        setCourses(courses.filter(course => course.courseId !== courseId));
+        setCourses(courses.filter(course => (course.$id || course.courseId) !== courseId));
 
         if (courseToDelete) {
           const newActivity = {

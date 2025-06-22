@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Tạo instance axios với cấu hình mặc định
 const api = axios.create({
-  baseURL: '/',
+  baseURL: 'https://moca.mom:2030/',
   timeout: 10000,
   headers: {
     

@@ -5,6 +5,8 @@ const EditCourseModal = ({ course, isOpen, onClose, onSave, categories }) => {
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
+    console.log("EditCourseModal: Course data received:", course);
+    console.log("EditCourseModal: Categories data received:", categories);
     setFormData(course);
   }, [course]);
 
@@ -14,19 +16,33 @@ const EditCourseModal = ({ course, isOpen, onClose, onSave, categories }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Handle number conversion for price and categoryId
-    const parsedValue =
-      name === "price"
-        ? parseFloat(value)
-        : name === "categoryId"
-        ? parseInt(value, 10)
-        : value;
+    
+    // Handle different field types
+    let parsedValue = value;
+    
+    if (name === "price") {
+      parsedValue = value === "" ? 0 : parseFloat(value);
+    } else if (name === "categoryId") {
+      // Ensure categoryId is a valid number and not empty
+      parsedValue = value === "" ? null : parseInt(value, 10);
+      if (isNaN(parsedValue)) {
+        parsedValue = null;
+      }
+    }
+    
     setFormData((prev) => ({ ...prev, [name]: parsedValue }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("DEBUG FORM SUBMIT:", formData); // ✅ Gỡ lỗi nếu cần
+    
+    // Validate categoryId before submitting
+    if (!formData.categoryId || formData.categoryId === null) {
+      alert("Vui lòng chọn một danh mục hợp lệ.");
+      return;
+    }
+    
+    console.log("DEBUG FORM SUBMIT:", formData);
     onSave(formData);
   };
 
@@ -68,6 +84,7 @@ const EditCourseModal = ({ course, isOpen, onClose, onSave, categories }) => {
               value={formData.price || 0}
               onChange={handleChange}
               min="0"
+              step="0.01"
             />
           </div>
 
