@@ -43,7 +43,7 @@ const ChatWithDoctor = () => {
   useEffect(() => {
     if (!token) return;
     const newConnection = new HubConnectionBuilder()
-      .withUrl("/chatHub", {
+      .withUrl("https://moca.mom:2030/chatHub", {
         accessTokenFactory: () => token,
       })
       .configureLogging(LogLevel.Information)
@@ -69,25 +69,20 @@ const ChatWithDoctor = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Gửi tin nhắn
+  // Join group khi chọn bác sĩ
+  useEffect(() => {
+    if (!selectedDoctor || !connection) return;
+    connection.invoke('JoinContact', selectedDoctor.contactId);
+    return () => {
+      connection.invoke('LeaveContact', selectedDoctor.contactId).catch(() => {});
+    };
+  }, [selectedDoctor, connection]);
+
+  // Gửi tin nhắn qua SignalR
   const handleSend = async () => {
-    if (!newMessage.trim() || !selectedDoctor) return;
+    if (!newMessage.trim() || !selectedDoctor || !connection) return;
     try {
-      await axios.post(
-        `${API_BASE}/messages`,
-        {
-          contactId: selectedDoctor.contactId,
-          messageText: newMessage,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      // Fetch lại messages sau khi gửi
-      const res = await axios.get(`${API_BASE}/messages/${selectedDoctor.contactId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMessages(res.data?.$values || []);
+      await connection.invoke('SendMessage', selectedDoctor.contactId, newMessage);
       setNewMessage("");
     } catch (err) {
       alert("Gửi tin nhắn thất bại");

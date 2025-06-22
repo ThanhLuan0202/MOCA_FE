@@ -78,7 +78,7 @@ const DoctorChat = () => {
     const token = localStorage.getItem('authToken');
     setToken(token);
     const conn = new signalR.HubConnectionBuilder()
-      .withUrl('https://moca.mom:2030/chathub', {
+      .withUrl('https://moca.mom:2030/chatHub', {
         accessTokenFactory: () => token
       })
       .withAutomaticReconnect()
@@ -107,31 +107,9 @@ const DoctorChat = () => {
 
   // Gửi tin nhắn
   const handleSend = async () => {
-    if (!newMessage.trim() || !selectedContact) return;
+    if (!newMessage.trim() || !selectedContact || !connection) return;
     try {
-      await apiClient.post(
-        `/api/ChatDoctor/messages`,
-        {
-          contactId: selectedContact.contactId,
-          messageText: newMessage,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      // Fetch lại messages sau khi gửi
-      const res = await apiClient.get(`/api/ChatDoctor/messages/${selectedContact.contactId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log('Messages after send:', res, res.data, res.data?.$values);
-      if (res.data?.$values) {
-        setMessages(res.data.$values);
-      } else if (res.$values) {
-        setMessages(res.$values);
-      } else {
-        // Không set về rỗng nếu response không đúng
-        console.warn('Không lấy được messages sau khi gửi');
-      }
+      await connection.invoke('SendMessage', selectedContact.contactId, newMessage);
       setNewMessage("");
     } catch (err) {
       alert("Gửi tin nhắn thất bại");
