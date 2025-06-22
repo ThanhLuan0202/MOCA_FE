@@ -56,7 +56,7 @@ const AppRoutes = () => {
       <Route path="/pregnancy-tracking-form" element={<PregnancyTrackingPage />} />
       <Route path="/baby-checkups-form" element={<BabyCheckupsPage />} />
       <Route
-        path="/admin-dashboard"
+        path="/admin-dashboard/*"
         element={
           <ProtectedRoute allowedRoles={[1]}>
             <AdminDashboard />
