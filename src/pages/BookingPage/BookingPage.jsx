@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './BookingPage.scss'; // Import the SCSS file for styling
+import apiClient from '../../services/api';
 
 const BookingPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,27 @@ const BookingPage = () => {
     consultationType: 'Goi video', // Default to 'Goi video'
     description: ''
   });
+  const [doctors, setDoctors] = useState([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(true);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingError, setBookingError] = useState('');
+
+  useEffect(() => {
+    // Lấy danh sách bác sĩ từ API
+    const fetchDoctors = async () => {
+      setLoadingDoctors(true);
+      try {
+        const res = await apiClient.get('/api/DoctorProfile');
+        const doctorArr = res?.$values || [];
+        setDoctors(doctorArr);
+      } catch (err) {
+        setDoctors([]);
+      } finally {
+        setLoadingDoctors(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   const timeSlots = [
     '08:00', '08:30', '09:00', '09:30',
@@ -21,18 +43,6 @@ const BookingPage = () => {
     '16:00', '16:30', '17:00', '17:30',
     '18:00', '18:30', '19:00', '19:30',
     '20:00'
-  ];
-
-  // Dummy data for doctors, replace with actual data later
-  const doctors = [
-    { id: 1, name: 'Bác sĩ A', avatar: 'https://via.placeholder.com/60' },
-    { id: 2, name: 'Bác sĩ B', avatar: 'https://via.placeholder.com/60' },
-    { id: 3, name: 'Bác sĩ C', avatar: 'https://via.placeholder.com/60' },
-    { id: 4, name: 'Bác sĩ D', avatar: 'https://via.placeholder.com/60' },
-    { id: 5, name: 'Bác sĩ E', avatar: 'https://via.placeholder.com/60' },
-    { id: 6, name: 'Bác sĩ F', avatar: 'https://via.placeholder.com/60' },
-    { id: 7, name: 'Bác sĩ G', avatar: 'https://via.placeholder.com/60' },
-    { id: 8, name: 'Bác sĩ H', avatar: 'https://via.placeholder.com/60' },
   ];
 
   const handleChange = (e) => {
@@ -48,10 +58,38 @@ const BookingPage = () => {
     setFormData(prev => ({ ...prev, doctor }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
-    // Handle form submission logic here
+    setBookingSuccess(false);
+    setBookingError('');
+    // Validate
+    if (!formData.doctor || !formData.date || !formData.time) {
+      setBookingError('Vui lòng chọn bác sĩ, ngày và giờ!');
+      return;
+    }
+    // Ghép ngày và giờ thành bookingDate ISO
+    const bookingDate = new Date(`${formData.date}T${formData.time}:00`);
+    // Map consultationType về số nếu cần
+    let consultationType = 0;
+    if (formData.consultationType === 'Goi video') consultationType = 1;
+    else if (formData.consultationType === 'Goi') consultationType = 2;
+    else if (formData.consultationType === 'Tin nhan') consultationType = 3;
+    // Gửi booking
+    try {
+      await apiClient.post('/api/DoctorBooking', {
+        doctorId: formData.doctor.doctorId,
+        bookingDate: bookingDate.toISOString(),
+        consultationType,
+        requiredDeposit: 100000,
+        status: 'Pending',
+        notes: formData.description,
+        price: 200000
+      });
+      setBookingSuccess(true);
+      setBookingError('');
+    } catch (err) {
+      setBookingError('Đặt lịch thất bại!');
+    }
   };
 
   return (
@@ -151,18 +189,23 @@ const BookingPage = () => {
           <div className="form-group doctor-select">
             <label>Chọn Bác sĩ</label>
             <p className="sub-label">Tìm hiểu thông tin bác sĩ</p>
-            <div className="doctor-list">
-              {doctors.map(doctor => (
-                <div
-                  key={doctor.id}
-                  className={`doctor-card ${formData.doctor?.id === doctor.id ? 'selected' : ''}`}
-                  onClick={() => handleDoctorSelect(doctor)}
-                >
-                  <img src={doctor.avatar} alt={doctor.name} className="doctor-avatar" />
-                  <span>{doctor.name}</span>
-                </div>
-              ))}
-            </div>
+            {loadingDoctors ? (
+              <div>Đang tải danh sách bác sĩ...</div>
+            ) : (
+              <div className="doctor-list">
+                {doctors.map(doctor => (
+                  <div
+                    key={doctor.doctorId}
+                    className={`doctor-card ${formData.doctor?.doctorId === doctor.doctorId ? 'selected' : ''}`}
+                    onClick={() => handleDoctorSelect(doctor)}
+                  >
+                    {/* <img src={doctor.user?.image || 'https://via.placeholder.com/60'} alt={doctor.fullName} className="doctor-avatar" /> */}
+                    <span>{doctor.fullName}</span>
+                    <div style={{fontSize:'12px',color:'#888'}}>{doctor.specialization}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -222,6 +265,9 @@ const BookingPage = () => {
 
         <button type="submit" className="submit-button">Xác nhận đặt lịch</button>
       </form>
+
+      {bookingSuccess && <div className="success-message">Đặt lịch thành công!</div>}
+      {bookingError && <div className="error-message">{bookingError}</div>}
     </div>
   );
 };
