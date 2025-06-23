@@ -134,7 +134,7 @@ const PregnancyDiary = () => {
     setShowAdvice(true);
     setLoadingAdvice(true);
     try {
-      const data = await apiClient.post("/api/Advice/advice");
+      const data = await apiClient.post("/api/Advice/advice", selectedPregnancyId);
       console.log(data);
       setAdvice(data.advice || JSON.stringify(data, null, 2));
     } catch (err) {
@@ -255,11 +255,14 @@ const PregnancyDiary = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {pregnancyTracking.map((track, idx) => (
-                          <tr key={track.trackingId || idx}>
-                            {momTrackingFields.map(f => <td key={f.key}>{track[f.key]}</td>)}
-                          </tr>
-                        ))}
+                        {pregnancyTracking
+                          .slice()
+                          .sort((a, b) => new Date(b.trackingDate) - new Date(a.trackingDate))
+                          .map((track, idx) => (
+                            <tr key={track.trackingId || idx}>
+                              {momTrackingFields.map(f => <td key={f.key}>{track[f.key]}</td>)}
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -288,26 +291,29 @@ const PregnancyDiary = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {babyTracking.map((track, idx) => (
-                          <tr key={track.checkupBabyId || idx}>
-                            {babyTrackingFields.map(f => {
-                              if (f.key === 'doctorComment') {
-                                const val = track[f.key] || '';
-                                if (val.length > 10) {
-                                  return (
-                                    <td key={f.key}>
-                                      <button className="view-detail-btn" onClick={() => { setShowDoctorComment(true); setDoctorCommentDetail(val); }}>Xem chi tiết</button>
-                                    </td>
-                                  );
+                        {babyTracking
+                          .slice()
+                          .sort((a, b) => new Date(b.checkupDate) - new Date(a.checkupDate))
+                          .map((track, idx) => (
+                            <tr key={track.checkupBabyId || idx}>
+                              {babyTrackingFields.map(f => {
+                                if (f.key === 'doctorComment') {
+                                  const val = track[f.key] || '';
+                                  if (val.length > 10) {
+                                    return (
+                                      <td key={f.key}>
+                                        <button className="view-detail-btn" onClick={() => { setShowDoctorComment(true); setDoctorCommentDetail(val); }}>Xem chi tiết</button>
+                                      </td>
+                                    );
+                                  } else {
+                                    return <td key={f.key}>{val}</td>;
+                                  }
                                 } else {
-                                  return <td key={f.key}>{val}</td>;
+                                  return <td key={f.key}>{track[f.key]}</td>;
                                 }
-                              } else {
-                                return <td key={f.key}>{track[f.key]}</td>;
-                              }
-                            })}
-                          </tr>
-                        ))}
+                              })}
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -421,15 +427,18 @@ const PregnancyDiary = () => {
         <h3>Nhật ký thai kỳ</h3>
       </div>
       <div className="diary-entries-list">
-        {(showAllDiaryEntries ? diaryEntries : diaryEntries.slice(0, 5)).map((entry, index) => (
-          <Comment
-            key={index}
-            date={entry.createDate}
-            week={entry.feeling}
-            title={entry.feeling}
-            content={entry.title}
-          />
-        ))}
+        {(showAllDiaryEntries ? diaryEntries : diaryEntries.slice(0, 5))
+          .slice()
+          .sort((a, b) => new Date(b.createDate) - new Date(a.createDate))
+          .map((entry, index) => (
+            <Comment
+              key={index}
+              date={entry.createDate}
+              week={entry.feeling}
+              title={entry.feeling}
+              content={entry.title}
+            />
+          ))}
 
         {showAdvice && (
           <div className="advice-modal-overlay">
