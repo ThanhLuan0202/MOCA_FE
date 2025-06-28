@@ -1,6 +1,6 @@
 # 🤰 MOM CARE - Pregnancy Support Web App (Frontend)
 
-🌐 **URL:** [https://your-frontend-url.com](https://your-frontend-url.com)
+🌐 **URL:** https://moca-fe.vercel.app/
 📁 **Tech Stack:** ReactJS · TailwindCSS · Axios · React Router
 
 ---
