@@ -47,6 +47,11 @@ const Header = () => {
           <Link to='/about-us'>
             <p>Chúng tôi</p>
           </Link>
+          {isLoggedIn && currentUser?.roleId !== 4 && (
+            <Link to="/booking-history">
+              <p>Lịch hẹn</p>
+            </Link>
+          )}
           {isLoggedIn && currentUser?.roleId === 4 ? (
             <Link to="/doctor">
               <p>Bác sĩ</p>

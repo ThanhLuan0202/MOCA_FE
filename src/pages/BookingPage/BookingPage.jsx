@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './BookingPage.scss'; // Import the SCSS file for styling
 import apiClient from '../../services/api';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Thêm import axios trực tiếp
 
 const BookingPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -11,16 +14,17 @@ const BookingPage = () => {
     time: '',
     service: '',
     doctor: null,
-    consultationType: 'Goi video', // Default to 'Goi video'
+    consultationType: 'Tin nhan', // Default to 'Tin nhan'
     description: ''
   });
   const [doctors, setDoctors] = useState([]);
   const [loadingDoctors, setLoadingDoctors] = useState(true);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Lấy danh sách bác sĩ từ API
+    // Lấy danh sách bác sĩ từ API (vẫn dùng apiClient)
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
       try {
@@ -28,6 +32,7 @@ const BookingPage = () => {
         const doctorArr = res?.$values || [];
         setDoctors(doctorArr);
       } catch (err) {
+        console.error('Error fetching doctors:', err);
         setDoctors([]);
       } finally {
         setLoadingDoctors(false);
@@ -62,33 +67,65 @@ const BookingPage = () => {
     e.preventDefault();
     setBookingSuccess(false);
     setBookingError('');
+    setIsSubmitting(true);
+
     // Validate
     if (!formData.doctor || !formData.date || !formData.time) {
       setBookingError('Vui lòng chọn bác sĩ, ngày và giờ!');
+      setIsSubmitting(false);
       return;
     }
+
     // Ghép ngày và giờ thành bookingDate ISO
     const bookingDate = new Date(`${formData.date}T${formData.time}:00`);
-    // Map consultationType về số nếu cần
+    
+    // Map consultationType về số theo yêu cầu
     let consultationType = 0;
-    if (formData.consultationType === 'Goi video') consultationType = 1;
+    if (formData.consultationType === 'Tin nhan') consultationType = 1;
     else if (formData.consultationType === 'Goi') consultationType = 2;
-    else if (formData.consultationType === 'Tin nhan') consultationType = 3;
-    // Gửi booking
+    else if (formData.consultationType === 'Goi video') consultationType = 3;
+
+    // Gửi booking với API Azure
     try {
-      await apiClient.post('/api/DoctorBooking', {
+      const bookingData = {
         doctorId: formData.doctor.doctorId,
         bookingDate: bookingDate.toISOString(),
-        consultationType,
-        requiredDeposit: 100000,
-        status: 'Pending',
-        notes: formData.description,
-        price: 200000
-      });
-      setBookingSuccess(true);
-      setBookingError('');
+        consultationType: consultationType,
+        requiredDeposit: 50000, // Mặc định 50000
+        notes: formData.description || '',
+        price: 150000 // Mặc định 150000
+      };
+
+      console.log('Sending booking data:', bookingData);
+      
+      // Lấy token từ localStorage
+      const token = localStorage.getItem('authToken');
+      // Gọi trực tiếp API Azure cho booking, gửi kèm Authorization header
+      const response = await axios.post(
+        'https://moca-d8fxfqgdb4hxg5ha.southeastasia-01.azurewebsites.net/api/DoctorBooking',
+        bookingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      console.log('Booking response:', response.data);
+
+      if (response.data && response.data.paymentUrl) {
+        // Chuyển hướng đến PayPal
+        window.location.href = response.data.paymentUrl;
+      } else {
+        setBookingSuccess(true);
+        setBookingError('');
+      }
     } catch (err) {
-      setBookingError('Đặt lịch thất bại!');
+      console.error('Booking error:', err);
+      setBookingError('Đặt lịch thất bại! Vui lòng thử lại.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -180,7 +217,6 @@ const BookingPage = () => {
               onChange={handleChange}
             >
               <option value="">Chọn dịch vụ</option>
-              {/* Add service options here */}
               <option value="tu-van-thai-ky">Tư vấn thai kỳ</option>
               <option value="kham-thai">Khám thai</option>
             </select>
@@ -199,7 +235,6 @@ const BookingPage = () => {
                     className={`doctor-card ${formData.doctor?.doctorId === doctor.doctorId ? 'selected' : ''}`}
                     onClick={() => handleDoctorSelect(doctor)}
                   >
-                    {/* <img src={doctor.user?.image || 'https://via.placeholder.com/60'} alt={doctor.fullName} className="doctor-avatar" /> */}
                     <span>{doctor.fullName}</span>
                     <div style={{fontSize:'12px',color:'#888'}}>{doctor.specialization}</div>
                   </div>
@@ -217,11 +252,11 @@ const BookingPage = () => {
                 <input
                   type="radio"
                   name="consultationType"
-                  value="Goi video"
-                  checked={formData.consultationType === 'Goi video'}
+                  value="Tin nhan"
+                  checked={formData.consultationType === 'Tin nhan'}
                   onChange={handleChange}
                 />
-                Gọi video
+                Tin nhắn (consultationType: 1)
               </label>
             </div>
             <div>
@@ -233,7 +268,7 @@ const BookingPage = () => {
                   checked={formData.consultationType === 'Goi'}
                   onChange={handleChange}
                 />
-                Gọi
+                Gọi (consultationType: 2)
               </label>
             </div>
             <div>
@@ -241,11 +276,11 @@ const BookingPage = () => {
                 <input
                   type="radio"
                   name="consultationType"
-                  value="Tin nhan"
-                  checked={formData.consultationType === 'Tin nhan'}
+                  value="Goi video"
+                  checked={formData.consultationType === 'Goi video'}
                   onChange={handleChange}
                 />
-                Tin nhắn
+                Gọi video (consultationType: 3)
               </label>
             </div>
           </div>
@@ -261,9 +296,24 @@ const BookingPage = () => {
               rows="5"
             ></textarea>
           </div>
+
+          <div className="form-group pricing-info">
+            <label>Thông tin thanh toán</label>
+            <div className="pricing-details">
+              <p><strong>Phí tư vấn:</strong> 150,000 VNĐ</p>
+              <p><strong>Đặt cọc:</strong> 50,000 VNĐ</p>
+              <p><strong>Tổng cộng:</strong> 200,000 VNĐ</p>
+            </div>
+          </div>
         </div>
 
-        <button type="submit" className="submit-button">Xác nhận đặt lịch</button>
+        <button 
+          type="submit" 
+          className="submit-button" 
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Đang xử lý...' : 'Xác nhận đặt lịch'}
+        </button>
       </form>
 
       {bookingSuccess && <div className="success-message">Đặt lịch thành công!</div>}

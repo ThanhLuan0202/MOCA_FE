@@ -26,6 +26,8 @@ import MomRegister from "../pages/RegisterPage/MomRegister";
 import DoctorPage from '../pages/DoctorPage/DoctorPage';
 import { jwtDecode } from "jwt-decode";
 import UserDoctorChatPage from '../pages/UserDoctorChatPage/UserDoctorChatPage';
+import PaymentCallbackPage from '../pages/PaymentCallbackPage/PaymentCallbackPage';
+import BookingHistoryPage from '../pages/BookingHistoryPage/BookingHistoryPage';
 
 // import thêm các page khác nếu có
 
@@ -46,6 +48,7 @@ const AppRoutes = () => {
       <Route path="/pregnancy-tracking" element={<PregnancyTrackingPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/payment-callback" element={<PaymentCallbackPage />} />
       <Route path="/coach" element={<CoachPage />} />
       <Route path="/profile-coach" element={<ProfileCoach />} />
       <Route path="/booking" element={<BookingPage />} />
@@ -57,6 +60,7 @@ const AppRoutes = () => {
       <Route path="/pregnancy-tracking-form" element={<PregnancyTrackingPage />} />
       <Route path="/baby-checkups-form" element={<BabyCheckupsPage />} />
       <Route path="/chat-doctor" element={<UserDoctorChatPage />} />
+      <Route path="/booking-history" element={<BookingHistoryPage />} />
       <Route
         path="/admin-dashboard/*"
         element={
