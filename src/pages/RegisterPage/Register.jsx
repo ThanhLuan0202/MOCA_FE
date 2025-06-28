@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/auth';
+import apiClient from '../../services/api';
 
 function Register() {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ function Register() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showDoctorRegister, setShowDoctorRegister] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -129,111 +131,121 @@ function Register() {
     return (
         <div className="register-container">
             <div className="register-form">
-                <h1>Tạo tài khoản</h1>
-                <p>Chào mừng bạn đến với Moca! Chúc bạn và bé một ngày vui vẻ và tràn đầy sức khỏe!</p>
+                <div style={{display:'flex', justifyContent:'center', gap:16, marginBottom:24}}>
+                  <button type="button" className={showDoctorRegister ? '' : 'active'} style={{padding:'8px 18px', borderRadius:8, border:'none', background:!showDoctorRegister?'#6a5af9':'#eee', color:!showDoctorRegister?'#fff':'#333', fontWeight:600, cursor:'pointer'}} onClick={()=>setShowDoctorRegister(false)}>Đăng ký người dùng</button>
+                  <button type="button" className={showDoctorRegister ? 'active' : ''} style={{padding:'8px 18px', borderRadius:8, border:'none', background:showDoctorRegister?'#6a5af9':'#eee', color:showDoctorRegister?'#fff':'#333', fontWeight:600, cursor:'pointer'}} onClick={()=>setShowDoctorRegister(true)}>Đăng ký bác sĩ</button>
+                </div>
+                {showDoctorRegister ? (
+                  <DoctorRegisterForm />
+                ) : (
+                  <>
+                    <h1>Tạo tài khoản</h1>
+                    <p>Chào mừng bạn đến với Moca! Chúc bạn và bé một ngày vui vẻ và tràn đầy sức khỏe!</p>
 
-                {error && <div className="error-message" style={{ whiteSpace: 'pre-wrap' }}>{error}</div>}
+                    {error && <div className="error-message" style={{ whiteSpace: 'pre-wrap' }}>{error}</div>}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="fullName">Họ và tên</label>
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="fullName"
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            placeholder="Họ và tên của bạn"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Email của bạn"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="phoneNumber">Số điện thoại</label>
-                        <input
-                            type="tel"
-                            id="phoneNumber"
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                            placeholder="Số điện thoại của bạn"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="dateOfBirth">Ngày sinh</label>
-                        <div className="input-with-icon">
-                            <DatePicker
-                                selected={formData.dateOfBirth}
-                                onChange={handleDateChange}
-                                dateFormat="dd/MM/yyyy"
-                                placeholderText="DD/MM/YYYY"
-                                customInput={<input type="text" id="dateOfBirth" />}
-                                showIcon
-                                icon={<FaCalendarAlt className="icon" />}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="password">Mật khẩu</label>
-                        <div className="input-with-icon">
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="fullName">Họ và tên</label>
                             <input
-                                type={showPassword ? "text" : "password"}
-                                id="password"
-                                name="password"
-                                value={formData.password}
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                value={formData.fullName}
                                 onChange={handleChange}
-                                placeholder="Mật khẩu"
+                                placeholder="Họ và tên của bạn"
                                 required
                             />
-                            <span className="icon" onClick={togglePasswordVisibility}>
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </span>
                         </div>
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-                        <div className="input-with-icon">
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
                             <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Xác nhận mật khẩu"
+                                placeholder="Email của bạn"
                                 required
                             />
-                            <span className="icon" onClick={toggleConfirmPasswordVisibility}>
-                                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                            </span>
                         </div>
-                    </div>
 
-                    <button type="submit" className="register-button" disabled={loading}>
-                        {loading ? 'Đang đăng ký...' : 'Đăng ký'}
-                    </button>
+                        <div className="form-group">
+                            <label htmlFor="phoneNumber">Số điện thoại</label>
+                            <input
+                                type="tel"
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                value={formData.phoneNumber}
+                                onChange={handleChange}
+                                placeholder="Số điện thoại của bạn"
+                                required
+                            />
+                        </div>
 
-                    <div className="login-with-google">
-                        <p>Đăng nhập với</p>
-                        <FcGoogle className="google-icon-2" />
-                    </div>
-                </form>
+                        <div className="form-group">
+                            <label htmlFor="dateOfBirth">Ngày sinh</label>
+                            <div className="input-with-icon">
+                                <DatePicker
+                                    selected={formData.dateOfBirth}
+                                    onChange={handleDateChange}
+                                    dateFormat="dd/MM/yyyy"
+                                    placeholderText="DD/MM/YYYY"
+                                    customInput={<input type="text" id="dateOfBirth" />}
+                                    showIcon
+                                    icon={<FaCalendarAlt className="icon" />}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">Mật khẩu</label>
+                            <div className="input-with-icon">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Mật khẩu"
+                                    required
+                                />
+                                <span className="icon" onClick={togglePasswordVisibility}>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                            <div className="input-with-icon">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    placeholder="Xác nhận mật khẩu"
+                                    required
+                                />
+                                <span className="icon" onClick={toggleConfirmPasswordVisibility}>
+                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" className="register-button" disabled={loading}>
+                            {loading ? 'Đang đăng ký...' : 'Đăng ký'}
+                        </button>
+
+                        <div className="login-with-google">
+                            <p>Đăng nhập với</p>
+                            <FcGoogle className="google-icon-2" />
+                        </div>
+                    </form>
+                  </>
+                )}
             </div>
         </div>
     );

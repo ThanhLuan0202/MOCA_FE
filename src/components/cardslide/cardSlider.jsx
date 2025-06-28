@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AiImage from '../../assets/ai-support.png';
-import './CardSlider.scss';
+import './cardSlider.scss';
 import { WiStars } from "react-icons/wi";
 import { GoHeart } from "react-icons/go";
 import { TbShieldHalf } from "react-icons/tb";
