@@ -1,12 +1,30 @@
-# React + Vite
+# 🤰 MOM CARE - Pregnancy Support Web App (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🌐 **URL:** [https://your-frontend-url.com](https://your-frontend-url.com)
+📁 **Tech Stack:** ReactJS · TailwindCSS · Axios · React Router
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Introduction
 
-## Expanding the ESLint configuration
+**MOM CARE** is a web application for pregnant mothers, supporting pregnancy tracking, providing smart advice from AI, and scheduling consultations with obstetricians.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🔍 Outstanding features:
+- 🧠 **Health consultation with AI GPT:** Chat to ask any questions related to pregnancy.
+
+- 📅 **Make an appointment with a doctor:** Contact, choose a doctor, choose a time, and schedule an appointment online.
+- 📈 **Pregnancy Tracking:** Track each stage of pregnancy and receive appropriate advice.
+
+- 💬 **Real-time Chat:** Chat directly with a consultant.
+
+- 📚 **Maternity Knowledge:** Provide scientific, easy-to-understand and up-to-date information.
+
+---
+
+## 🛠️ Installation
+
+```bash
+git clone https://github.com/yourusername/momcare-frontend.git
+cd MOCA_FE
+npm install
+npm run dev
