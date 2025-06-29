@@ -25,7 +25,8 @@ const ChatWithDoctor = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        setDoctors(res.data?.$values || []);
+        const allContacts = res.data?.$values || [];
+        setDoctors(allContacts.filter(c => c.status === 'Active'));
       });
   }, [token]);
 
@@ -138,7 +139,6 @@ const ChatWithDoctor = () => {
                   <span className="font-semibold text-gray-800 text-base">
                     {profile?.fullName || contact.doctor?.name || `Bác sĩ #${contact.doctorId}`}
                   </span>
-                  <span className="text-xs text-gray-500">ID: {contact.doctorId}</span>
                 </div>
               </div>
             );
@@ -155,14 +155,14 @@ const ChatWithDoctor = () => {
               messages.map((msg, idx) => (
                 <div
                   key={msg.messageId || idx}
-                  className={`mb-2 flex ${msg.senderType === "User" ? "justify-end" : "justify-start"}`}
+                  className={`flex w-full mb-3 ${msg.senderType === "User" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`px-3 py-2 rounded-2xl max-w-xs shadow 
-                      ${msg.senderType === "User" ? "bg-pink-500 text-white ml-auto" : "bg-white text-gray-800 mr-auto border"}`}
+                    className={
+                      `chat-bubble ${msg.senderType === "User" ? "user-bubble" : "doctor-bubble"}`
+                    }
                   >
                     {msg.messageText}
-                    <div className="text-xs text-gray-400 mt-1">{new Date(msg.sendAt).toLocaleString()}</div>
                   </div>
                 </div>
               ))
@@ -192,6 +192,72 @@ const ChatWithDoctor = () => {
           </div>
         )}
       </div>
+      {/* Thêm style inline cho chat bubble đẹp hơn */}
+      <style>{`
+        .chat-bubble {
+          padding: 12px 18px;
+          border-radius: 22px;
+          max-width: 70%;
+          font-size: 16px;
+          line-height: 1.6;
+          box-shadow: 0 2px 8px #fbb6ce33;
+          margin-bottom: 2px;
+          word-break: break-word;
+          display: inline-block;
+          position: relative;
+          margin-left: 6px;
+          margin-right: 6px;
+        }
+        .user-bubble {
+          background: linear-gradient(90deg,#f472b6 60%,#fb7185 100%);
+          color: #fff;
+          margin-left: auto;
+          border-bottom-right-radius: 6px;
+          border-top-right-radius: 22px;
+          border-top-left-radius: 22px;
+          border-bottom-left-radius: 22px;
+        }
+        .doctor-bubble {
+          background: #fff;
+          color: #222;
+          border: 1.5px solid #fbb6ce;
+          margin-right: auto;
+          border-bottom-left-radius: 6px;
+          border-top-right-radius: 22px;
+          border-top-left-radius: 22px;
+          border-bottom-right-radius: 22px;
+        }
+        .chat-with-doctor-container input[type="text"] {
+          font-size: 16px;
+          border: 1.5px solid #fbb6ce;
+          border-radius: 18px;
+          padding: 12px 18px;
+          background: #fff;
+          transition: border 0.2s;
+          outline: none;
+        }
+        .chat-with-doctor-container input[type="text"]:focus {
+          border: 1.5px solid #fb7185;
+          box-shadow: 0 2px 8px #fbb6ce33;
+        }
+        .chat-with-doctor-container button {
+          font-size: 16px;
+          font-weight: 600;
+          border-radius: 18px;
+          padding: 10px 28px;
+          background: linear-gradient(90deg,#fb7185 60%,#f472b6 100%);
+          color: #fff;
+          border: none;
+          box-shadow: 0 2px 8px #fbb6ce33;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+          cursor: pointer;
+        }
+        .chat-with-doctor-container button:hover {
+          background: linear-gradient(90deg,#f472b6 60%,#fb7185 100%);
+          box-shadow: 0 4px 16px #fbb6ce33;
+          transform: translateY(-2px) scale(1.03);
+        }
+      `}</style>
     </div>
   );
 };

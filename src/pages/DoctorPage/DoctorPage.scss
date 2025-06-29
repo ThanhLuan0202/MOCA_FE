@@ -178,6 +178,35 @@ body {
       transition: background-color 0.2s;
       &:hover { background-color: $primary-hover; }
     }
+    .start-btn {
+      background-color: #22c55e; // xanh lá
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+      &:hover { background-color: #16a34a; }
+    }
+    .expired-btn {
+      background-color: #d1d5db; // xám nhạt
+      color: #6b7280;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
+    .waiting-btn {
+      background-color: #fbbf24; // vàng
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
   }
 }
 

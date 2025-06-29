@@ -15,7 +15,7 @@ const DoctorPage = () => {
   const renderActiveView = () => {
     switch (activeView) {
       case 'schedule':
-        return <DoctorSchedule />;
+        return <DoctorSchedule setActiveView={setActiveView} />;
       case 'chat':
         return <DoctorChat />;
       case 'settings':

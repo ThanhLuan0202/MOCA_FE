@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './MomProfilePage.scss';
 import { FaBirthdayCake, FaMapMarkerAlt, FaHeart, FaTint, FaNotesMedical } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const MomProfilePage = () => {
   const [momProfile, setMomProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchMomProfile = async () => {
       try {
-        // Hiện tại, userId được đặt cứng là 2 như ví dụ bạn cung cấp.
-        // Trong thực tế, bạn cần lấy userId của người dùng đang đăng nhập.
-        const userId = 2; 
+        // Lấy userId từ query string nếu có, nếu không thì lấy userId mặc định (user đăng nhập)
+        const params = new URLSearchParams(location.search);
+        const userId = params.get('userId') || 2;
         const response = await axios.get(`https://moca.mom:2030/api/MomProfile/GetUserById?userId=${userId}`, {
           withCredentials: true,
         });
@@ -29,7 +30,7 @@ const MomProfilePage = () => {
     };
 
     fetchMomProfile();
-  }, []);
+  }, [location.search]);
 
   if (loading) {
     return <div className="mom-profile-section">Đang tải thông tin...</div>;
