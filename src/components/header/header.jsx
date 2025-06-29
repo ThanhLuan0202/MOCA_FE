@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './header.scss';
 import logo from '../../assets/logo.png';
@@ -7,11 +7,13 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { FiLogOut } from 'react-icons/fi';
 import authService from '../../services/auth';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import axios from 'axios';
 
 const Header = () => {
     const navigate = useNavigate();
     const { isLoggedIn, logout, currentUser } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showRegisterMom, setShowRegisterMom] = useState(true);
   
     const handleMouseEnter = () => setShowDropdown(true);
     const handleMouseLeave = () => setShowDropdown(false);
@@ -20,6 +22,24 @@ const Header = () => {
       logout();
       navigate("/login");
     };
+  
+    useEffect(() => {
+      if (isLoggedIn && currentUser?.userId) {
+        axios.get(`https://moca.mom:2030/api/MomProfile/GetUserById?userId=${currentUser.userId}`, { withCredentials: true })
+          .then(res => {
+            if (res && res.data) {
+              setShowRegisterMom(false);
+            } else {
+              setShowRegisterMom(true);
+            }
+          })
+          .catch(() => {
+            setShowRegisterMom(true);
+          });
+      } else {
+        setShowRegisterMom(true);
+      }
+    }, [isLoggedIn, currentUser]);
   
     return (
       <div className="header">
@@ -69,9 +89,11 @@ const Header = () => {
                 onMouseLeave={handleMouseLeave}
                 style={{ display: showDropdown ? 'block' : 'none' }}
               >
-                <Link to="/register/mom">
-                  <button>Đăng ký Mẹ bầu</button>
-                </Link>
+                {showRegisterMom && (
+                  <Link to="/register/mom">
+                    <button>Đăng ký Mẹ bầu</button>
+                  </Link>
+                )}
                 <Link to="/register/doctor">
                   <button>Đăng ký Bác sĩ</button>
                 </Link>

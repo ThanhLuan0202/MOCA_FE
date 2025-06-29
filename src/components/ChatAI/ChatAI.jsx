@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ChatAI.css"; 
 import { useAuth } from "../../contexts/AuthContext";
 import apiClient from "../../services/api";
+import axios from "axios";
 
 const ChatAI = () => {
   const [show, setShow] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const { isLoggedIn } = useAuth();
+  const [hasChatAIPackage, setHasChatAIPackage] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    axios.get("https://moca.mom:2030/api/PurchasedPackage/GetEnroll", { withCredentials: true })
+      .then(res => {
+        const values = res?.data?.$values || [];
+        const hasChatAI = values.some(pkg => pkg?.package?.packageName === "Chat AI");
+        setHasChatAIPackage(hasChatAI);
+      })
+      .catch(() => setHasChatAIPackage(false));
+  }, [isLoggedIn]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -26,7 +39,7 @@ const ChatAI = () => {
     }
   };
 
-  if (!isLoggedIn) return null;
+  if (!isLoggedIn || !hasChatAIPackage) return null;
 
   return (
     <div>
