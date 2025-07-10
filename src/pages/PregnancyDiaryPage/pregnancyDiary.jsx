@@ -131,15 +131,31 @@ const PregnancyDiary = () => {
     (circumference * (100 - weekProgressPercentage)) / 100;
 
   const handleAdviceClick = async () => {
+    if (!selectedPregnancyId) {
+      setAdvice("Vui lòng chọn một thai kỳ trước khi lấy lời khuyên.");
+      setShowAdvice(true);
+      setLoadingAdvice(false);
+      return;
+    }
     setShowAdvice(true);
     setLoadingAdvice(true);
     try {
-      const data = await apiClient.post("/api/Advice/advice", selectedPregnancyId);
-      console.log(data);
+      const data = await apiClient.get(`/api/Advice/advice${selectedPregnancyId}`);
       setAdvice(data.advice || JSON.stringify(data, null, 2));
     } catch (err) {
       console.error("Lỗi lấy lời khuyên:", err);
-      setAdvice("Không thể lấy lời khuyên. Vui lòng thử lại sau.");
+      let message = "Không thể lấy lời khuyên. Vui lòng thử lại sau.";
+      if (err.response) {
+        // Server trả về mã lỗi và message
+        message += `\nChi tiết: ${err.response.status} - ${err.response.data?.message || JSON.stringify(err.response.data)}`;
+      } else if (err.request) {
+        // Không nhận được phản hồi từ server
+        message += "\nKhông nhận được phản hồi từ máy chủ.";
+      } else {
+        // Lỗi khác
+        message += `\n${err.message}`;
+      }
+      setAdvice(message);
     }
     setLoadingAdvice(false);
   };

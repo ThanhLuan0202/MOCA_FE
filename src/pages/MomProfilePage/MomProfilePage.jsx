@@ -56,30 +56,29 @@ const MomProfilePage = () => {
           <div className="info-item">
             <FaBirthdayCake className="icon" />
             <span>Ngày sinh:</span>
-            <p>{momProfile.dateOfBirth}</p>
+            <p style={{ marginLeft: 8, display: 'inline' }}>{momProfile.dateOfBirth}</p>
           </div>
           <div className="info-item">
             <FaMapMarkerAlt className="icon" />
             <span>Địa chỉ:</span>
-            <p>{momProfile.address}</p>
+            <p style={{ marginLeft: 8, display: 'inline' }}>{momProfile.address}</p>
           </div>
           <div className="info-item">
             <FaHeart className="icon" />
             <span>Tình trạng hôn nhân:</span>
-            <p>{momProfile.maritalStatus}</p>
+            <p style={{ marginLeft: 8, display: 'inline' }}>{momProfile.maritalStatus}</p>
           </div>
           <div className="info-item">
             <FaTint className="icon" />
             <span>Nhóm máu:</span>
-            <p>{momProfile.bloodType}</p>
+            <p style={{ marginLeft: 8, display: 'inline' }}>{momProfile.bloodType}</p>
           </div>
           <div className="info-item full-width">
             <FaNotesMedical className="icon" />
             <span>Tiền sử bệnh lý:</span>
-            <p>{momProfile.medicalHistory || "Không có"}</p>
+            <p style={{ marginLeft: 8, display: 'inline' }}>{momProfile.medicalHistory || "Không có"}</p>
           </div>
         </div>
-        <button className="manage-pregnancy-btn" onClick={handleManagePregnancy}>Quản lý Thai kỳ</button>
       </div>
     </div>
   );

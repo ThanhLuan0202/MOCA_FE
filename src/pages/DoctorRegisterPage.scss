@@ -1,0 +1,123 @@
+.doctor-register-container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #f8e8ff 0%, #fff 100%);
+}
+
+.doctor-register-form {
+  background: #fff;
+  padding: 48px 36px 40px 36px;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(80, 0, 120, 0.13), 0 2px 16px rgba(255, 133, 218, 0.13);
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin: 32px 0;
+  border: 1.5px solid #f3d1ff;
+}
+
+h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #6a5af9;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #000;
+  font-weight: 500;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 13px 18px;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  &::placeholder {
+    color: #aaa;
+  }
+  &:focus {
+    outline: none;
+    border-color: #ff85da;
+    box-shadow: 0 0 5px rgba(255, 133, 218, 0.18);
+  }
+}
+
+.register-button {
+  width: 100%;
+  padding: 13px;
+  background-color: #ffB6E9;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 182, 233, 0.08);
+}
+.register-button:hover {
+  background-color: #ff66cc;
+}
+
+.success-message {
+  background: #e6ffed;
+  color: #1a7f37;
+  border: 1px solid #b7eb8f;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  background: #ffeaea;
+  color: #d32f2f;
+  border: 1px solid #ffbdbd;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .doctor-register-form {
+    padding: 24px 8px 24px 8px;
+    max-width: 98vw;
+    border-radius: 12px;
+  }
+} 

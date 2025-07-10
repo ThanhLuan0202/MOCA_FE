@@ -154,6 +154,73 @@
         }
       }
     }
+
+    // Style riêng cho từng thẻ monthly
+    .member-card.monthly:nth-child(2) { // Gói 1 tháng
+      background: linear-gradient(135deg, #fff0fa 60%, #ffe0f7 100%);
+      border: 2px solid #ffb6e9;
+      color: #ff4fcf;
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+    }
+    .member-card.monthly:nth-child(3) { // Gói 3 tháng
+      background: linear-gradient(135deg, #f3f0ff 60%, #e1d7ff 100%);
+      border: 2.5px solid #7c4dff;
+      color: #7c4dff;
+      position: relative;
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+    }
+    .member-card.monthly:nth-child(4) { // Gói 6 tháng
+      background: linear-gradient(135deg, #e0f7fa 60%, #b2ebf2 100%);
+      border: 2px solid #4dd0e1;
+      color: #00838f;
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+    }
+
+    // Hover effect cho từng thẻ monthly
+    .member-card.monthly:hover {
+      box-shadow: 0 8px 32px 0 rgba(255, 133, 218, 0.18), 0 4px 24px rgba(0,0,0,0.13);
+      transform: translateY(-8px) scale(1.035);
+      z-index: 2;
+    }
+    .member-card.monthly:nth-child(2):hover {
+      border-color: #ff4fcf;
+    }
+    .member-card.monthly:nth-child(3):hover {
+      border-color: #5f2eea;
+    }
+    .member-card.monthly:nth-child(4):hover {
+      border-color: #00bcd4;
+    }
+
+    // Ribbon nổi bật cho gói 3 tháng nếu có
+    .member-card.monthly:nth-child(3) .package-badge {
+      background: linear-gradient(90deg, #7c4dff 60%, #b39ddb 100%);
+      color: #fff;
+      border-radius: 12px;
+      padding: 4px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-left: 10px;
+      box-shadow: 0 2px 8px #7c4dff33;
+    }
+
+    // Nút chuyển động sáng dần khi hover
+    .member-card .package-button.primary {
+      transition: background 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px #ff85da33;
+    }
+    .member-card.monthly:nth-child(2) .package-button.primary:hover {
+      background: linear-gradient(90deg, #ff85da 60%, #ffb6e9 100%);
+      box-shadow: 0 4px 16px #ff85da55;
+    }
+    .member-card.monthly:nth-child(3) .package-button.primary:hover {
+      background: linear-gradient(90deg, #7c4dff 60%, #b39ddb 100%);
+      box-shadow: 0 4px 16px #7c4dff55;
+    }
+    .member-card.monthly:nth-child(4) .package-button.primary:hover {
+      background: linear-gradient(90deg, #00bcd4 60%, #b2ebf2 100%);
+      box-shadow: 0 4px 16px #00bcd455;
+    }
   }
 }
 

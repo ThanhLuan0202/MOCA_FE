@@ -3,6 +3,7 @@ import './BookingPage.scss'; // Import the SCSS file for styling
 import apiClient from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Thêm import axios trực tiếp
+import CustomModal from '../../components/CustomModal';
 
 const BookingPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const BookingPage = () => {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDoctorModal, setShowDoctorModal] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   useEffect(() => {
     // Lấy danh sách bác sĩ từ API (vẫn dùng apiClient)
@@ -61,6 +64,15 @@ const BookingPage = () => {
 
   const handleDoctorSelect = (doctor) => {
     setFormData(prev => ({ ...prev, doctor }));
+  };
+
+  const handleShowDoctorModal = (doctor) => {
+    setSelectedDoctor(doctor);
+    setShowDoctorModal(true);
+  };
+
+  const handleCloseDoctorModal = () => {
+    setShowDoctorModal(false);
   };
 
   const handleSubmit = async (e) => {
@@ -224,7 +236,9 @@ const BookingPage = () => {
 
           <div className="form-group doctor-select">
             <label>Chọn Bác sĩ</label>
-            <p className="sub-label">Tìm hiểu thông tin bác sĩ</p>
+            <button type="button" className="sub-label" style={{background:'none',border:'none',color:'#6a5af9',cursor:'pointer',padding:0,marginBottom:8}} disabled={!formData.doctor} onClick={() => handleShowDoctorModal(formData.doctor)}>
+              Chi tiết bác sĩ
+            </button>
             {loadingDoctors ? (
               <div>Đang tải danh sách bác sĩ...</div>
             ) : (
@@ -256,7 +270,7 @@ const BookingPage = () => {
                   checked={formData.consultationType === 'Tin nhan'}
                   onChange={handleChange}
                 />
-                Tin nhắn (consultationType: 1)
+                Tin nhắn
               </label>
             </div>
             <div>
@@ -268,7 +282,7 @@ const BookingPage = () => {
                   checked={formData.consultationType === 'Goi'}
                   onChange={handleChange}
                 />
-                Gọi (consultationType: 2)
+                Gọi
               </label>
             </div>
             <div>
@@ -280,7 +294,7 @@ const BookingPage = () => {
                   checked={formData.consultationType === 'Goi video'}
                   onChange={handleChange}
                 />
-                Gọi video (consultationType: 3)
+                Gọi video
               </label>
             </div>
           </div>
@@ -318,6 +332,17 @@ const BookingPage = () => {
 
       {bookingSuccess && <div className="success-message">Đặt lịch thành công!</div>}
       {bookingError && <div className="error-message">{bookingError}</div>}
+
+      {showDoctorModal && selectedDoctor && (
+        <CustomModal title="Chi tiết bác sĩ" onClose={handleCloseDoctorModal}>
+          <div style={{lineHeight:'1.7'}}>
+            <div><strong>Họ tên:</strong> {selectedDoctor.fullName}</div>
+            <div><strong>Chuyên môn:</strong> {selectedDoctor.specialization}</div>
+            <div><strong>Mô tả:</strong> {selectedDoctor.description}</div>
+            {/* Thêm các trường khác nếu cần */}
+          </div>
+        </CustomModal>
+      )}
     </div>
   );
 };

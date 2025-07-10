@@ -25,11 +25,7 @@ const Doctor = () => {
 
   const handleConfirmDoctor = async (doctorId) => {
     try {
-      await apiClient.post(
-        'https://moca.mom:2030/api/DoctorProfile/ConfirmDoctor',
-        doctorId, // body là số, không phải object
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await apiClient.get(`/api/DoctorProfile/ConfirmDoctor${doctorId}`);
       // Sau khi xác nhận, reload lại danh sách bác sĩ
       const response = await apiClient.get('/api/DoctorProfile');
       setDoctors(response.$values || response || []);

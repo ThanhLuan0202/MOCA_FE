@@ -28,6 +28,7 @@ import { jwtDecode } from "jwt-decode";
 import UserDoctorChatPage from '../pages/UserDoctorChatPage/UserDoctorChatPage';
 import PaymentCallbackPage from '../pages/PaymentCallbackPage/PaymentCallbackPage';
 import BookingHistoryPage from '../pages/BookingHistoryPage/BookingHistoryPage';
+import DoctorRegisterPage from '../pages/DoctorRegisterPage';
 
 // import thêm các page khác nếu có
 
@@ -74,6 +75,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={[4]}>
             <DoctorPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/register/doctor"
+        element={
+          <ProtectedRoute>
+            <DoctorRegisterPage />
           </ProtectedRoute>
         }
       />

@@ -4,10 +4,9 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'https://moca.mom:2030/',
   timeout: 10000,
-  headers: {
-    
-    'Content-Type': 'application/json',
-  },
+  // headers: {
+  //   'Content-Type': 'application/json', // ĐÃ XÓA DÒNG NÀY ĐỂ FORM DATA GỬI ĐÚNG
+  // },
   withCredentials: true,
 });
 
