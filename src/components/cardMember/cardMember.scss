@@ -224,6 +224,15 @@
   }
 }
 
+.package-button.primary:disabled {
+  background: #e0e0e0 !important;
+  color: #aaa !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  border: none;
+  transition: none;
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
   .card-member-section {

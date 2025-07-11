@@ -29,6 +29,8 @@ import UserDoctorChatPage from '../pages/UserDoctorChatPage/UserDoctorChatPage';
 import PaymentCallbackPage from '../pages/PaymentCallbackPage/PaymentCallbackPage';
 import BookingHistoryPage from '../pages/BookingHistoryPage/BookingHistoryPage';
 import DoctorRegisterPage from '../pages/DoctorRegisterPage';
+import PaymentSuccessPage from '../pages/PaymentSuccessPage';
+import PaymentCancelPage from '../pages/PaymentCancelPage';
 
 // import thêm các page khác nếu có
 
@@ -50,6 +52,8 @@ const AppRoutes = () => {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/payment-callback" element={<PaymentCallbackPage />} />
+      <Route path="/payment-success" element={<PaymentSuccessPage />} />
+      <Route path="/payment-cancel" element={<PaymentCancelPage />} />
       <Route path="/coach" element={<CoachPage />} />
       <Route path="/profile-coach" element={<ProfileCoach />} />
       <Route path="/booking" element={<BookingPage />} />

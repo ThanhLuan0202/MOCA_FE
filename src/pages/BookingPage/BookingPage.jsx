@@ -13,9 +13,7 @@ const BookingPage = () => {
     email: '',
     date: '',
     time: '',
-    service: '',
     doctor: null,
-    consultationType: 'Tin nhan', // Default to 'Tin nhan'
     description: ''
   });
   const [doctors, setDoctors] = useState([]);
@@ -81,57 +79,36 @@ const BookingPage = () => {
     setBookingError('');
     setIsSubmitting(true);
 
-    // Validate
     if (!formData.doctor || !formData.date || !formData.time) {
       setBookingError('Vui lòng chọn bác sĩ, ngày và giờ!');
       setIsSubmitting(false);
       return;
     }
 
-    // Ghép ngày và giờ thành bookingDate ISO
     const bookingDate = new Date(`${formData.date}T${formData.time}:00`);
-    
-    // Map consultationType về số theo yêu cầu
-    let consultationType = 0;
-    if (formData.consultationType === 'Tin nhan') consultationType = 1;
-    else if (formData.consultationType === 'Goi') consultationType = 2;
-    else if (formData.consultationType === 'Goi video') consultationType = 3;
 
-    // Gửi booking với API Azure
     try {
       const bookingData = {
         doctorId: formData.doctor.doctorId,
         bookingDate: bookingDate.toISOString(),
-        consultationType: consultationType,
-        requiredDeposit: 50000, // Mặc định 50000
+        consultationType: 1,
+        requiredDeposit: 0,
+        status: 'Pending',
         notes: formData.description || '',
-        price: 150000 // Mặc định 150000
+        price: 150000
       };
-
-      console.log('Sending booking data:', bookingData);
-      
-      // Lấy token từ localStorage
-      const token = localStorage.getItem('authToken');
-      // Gọi trực tiếp API Azure cho booking, gửi kèm Authorization header
-      const response = await axios.post(
-        'https://moca-d8fxfqgdb4hxg5ha.southeastasia-01.azurewebsites.net/api/DoctorBooking',
-        bookingData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-      
-      console.log('Booking response:', response.data);
-
-      if (response.data && response.data.paymentUrl) {
-        // Chuyển hướng đến PayPal
-        window.location.href = response.data.paymentUrl;
+      // Gọi API tạo booking
+      const response = await apiClient.post('https://moca.mom:2030/api/DoctorBooking/create', bookingData);
+      const bookingId = response?.booking?.bookingId || response?.bookingId;
+      if (!bookingId) throw new Error('Không lấy được bookingId');
+      // Gọi API lấy paymentUrl
+      const payRes = await apiClient.post(`https://moca.mom:2030/api/PayOS/create-payment-url/${bookingId}`);
+      const paymentUrl = payRes?.paymentUrl;
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
       } else {
         setBookingSuccess(true);
-        setBookingError('');
+        setBookingError('Không lấy được link thanh toán!');
       }
     } catch (err) {
       console.error('Booking error:', err);
@@ -140,6 +117,10 @@ const BookingPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const isToday = formData.date === todayStr;
+  const now = new Date();
 
   return (
     <div className="booking-page">
@@ -159,7 +140,7 @@ const BookingPage = () => {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Kevin Dalmian"
+                placeholder="Nhập họ tên đầy đủ của bạn"
               />
             </div>
           </div>
@@ -172,7 +153,7 @@ const BookingPage = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                placeholder="0909090909090"
+                placeholder="Nhập số điện thoại"
               />
             </div>
             <div className="form-group">
@@ -183,7 +164,7 @@ const BookingPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="kevindalm890@gmail.com"
+                placeholder="Nhập địa chỉ email"
               />
             </div>
           </div>
@@ -199,46 +180,42 @@ const BookingPage = () => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
+                min={todayStr}
               />
             </div>
             <div className="form-group time-slots-group">
               <label>Thời gian</label>
               <div className="time-slots">
-                {timeSlots.map(time => (
-                  <button
-                    key={time}
-                    type="button"
-                    className={`time-slot ${formData.time === time ? 'selected' : ''}`}
-                    onClick={() => handleTimeClick(time)}
-                  >
-                    {time}
-                  </button>
-                ))}
+                {timeSlots.map(time => {
+                  let disabled = false;
+                  if (isToday) {
+                    // Chỉ enable time slot cách hiện tại >= 2 tiếng
+                    const [h, m] = time.split(':');
+                    const slotDate = new Date(formData.date + 'T' + time + ':00');
+                    const diffMs = slotDate - now;
+                    if (diffMs < 2 * 60 * 60 * 1000) disabled = true;
+                  }
+                  return (
+                    <button
+                      key={time}
+                      type="button"
+                      className={`time-slot ${formData.time === time ? 'selected' : ''}`}
+                      onClick={() => handleTimeClick(time)}
+                      disabled={disabled}
+                      style={disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
 
         <div className="card-section">
-          <div className="form-group service-select">
-            <label htmlFor="service">Lựa chọn dịch vụ</label>
-            <select
-              id="service"
-              name="service"
-              value={formData.service}
-              onChange={handleChange}
-            >
-              <option value="">Chọn dịch vụ</option>
-              <option value="tu-van-thai-ky">Tư vấn thai kỳ</option>
-              <option value="kham-thai">Khám thai</option>
-            </select>
-          </div>
-
           <div className="form-group doctor-select">
             <label>Chọn Bác sĩ</label>
-            <button type="button" className="sub-label" style={{background:'none',border:'none',color:'#6a5af9',cursor:'pointer',padding:0,marginBottom:8}} disabled={!formData.doctor} onClick={() => handleShowDoctorModal(formData.doctor)}>
-              Chi tiết bác sĩ
-            </button>
             {loadingDoctors ? (
               <div>Đang tải danh sách bác sĩ...</div>
             ) : (
@@ -246,11 +223,25 @@ const BookingPage = () => {
                 {doctors.map(doctor => (
                   <div
                     key={doctor.doctorId}
-                    className={`doctor-card ${formData.doctor?.doctorId === doctor.doctorId ? 'selected' : ''}`}
+                    className={`doctor-card${formData.doctor?.doctorId === doctor.doctorId ? ' selected' : ''}`}
                     onClick={() => handleDoctorSelect(doctor)}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      border: formData.doctor?.doctorId === doctor.doctorId ? '2.5px solid #6a5af9' : '1.5px solid #e0e0e0',
+                      borderRadius: 12, padding: '14px 18px', marginBottom: 14, background: formData.doctor?.doctorId === doctor.doctorId ? '#f3f0ff' : '#fff', cursor: 'pointer', boxShadow: formData.doctor?.doctorId === doctor.doctorId ? '0 2px 12px #6a5af922' : '0 1px 4px #eee', transition: 'all 0.18s', minHeight: 56
+                    }}
                   >
-                    <span>{doctor.fullName}</span>
-                    <div style={{fontSize:'12px',color:'#888'}}>{doctor.specialization}</div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 17, color: '#2d1e6b' }}>{doctor.fullName}</div>
+                      <div style={{ fontSize: 14, color: '#8f6aff' }}>{doctor.specialization}</div>
+                    </div>
+                    <button
+                      type="button"
+                      style={{ marginLeft: 18, background: 'linear-gradient(90deg,#6a5af9 60%,#8f6aff 100%)', color: '#fff', border: 'none', borderRadius: 8, padding: '7px 18px', fontWeight: 600, fontSize: 15, cursor: 'pointer', boxShadow: '0 1px 6px #6a5af922', transition: 'background 0.2s' }}
+                      onClick={e => { e.stopPropagation(); handleShowDoctorModal(doctor); }}
+                    >
+                      Thông tin bác sĩ
+                    </button>
                   </div>
                 ))}
               </div>
@@ -259,46 +250,6 @@ const BookingPage = () => {
         </div>
 
         <div className="card-section">
-          <div className="form-group consultation-type">
-            <label>Hình thức tư vấn</label>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="consultationType"
-                  value="Tin nhan"
-                  checked={formData.consultationType === 'Tin nhan'}
-                  onChange={handleChange}
-                />
-                Tin nhắn
-              </label>
-            </div>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="consultationType"
-                  value="Goi"
-                  checked={formData.consultationType === 'Goi'}
-                  onChange={handleChange}
-                />
-                Gọi
-              </label>
-            </div>
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  name="consultationType"
-                  value="Goi video"
-                  checked={formData.consultationType === 'Goi video'}
-                  onChange={handleChange}
-                />
-                Gọi video
-              </label>
-            </div>
-          </div>
-
           <div className="form-group description-box">
             <label htmlFor="description">Mô tả về vấn đề bạn cần tư vấn</label>
             <textarea
@@ -306,17 +257,15 @@ const BookingPage = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Hãy cho tôi biết về vấn đề của bạn"
+              placeholder="Mô tả vấn đề bạn cần tư vấn..."
               rows="5"
             ></textarea>
           </div>
-
           <div className="form-group pricing-info">
             <label>Thông tin thanh toán</label>
             <div className="pricing-details">
               <p><strong>Phí tư vấn:</strong> 150,000 VNĐ</p>
-              <p><strong>Đặt cọc:</strong> 50,000 VNĐ</p>
-              <p><strong>Tổng cộng:</strong> 200,000 VNĐ</p>
+              <p><strong>Tổng cộng:</strong> 150,000 VNĐ</p>
             </div>
           </div>
         </div>

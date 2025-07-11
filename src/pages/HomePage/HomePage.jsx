@@ -8,6 +8,37 @@ import CardSlider from '../../components/cardslide/cardSlider';
 import CommunityCardSection from '../../components/communitycard/communitycard';
 import CardMemberSection from '../../components/cardMember/cardMember';
 import ContactFormSection from '../../components/form/form';
+import apiClient from '../../services/api';
+
+const UPGRADE_PACKAGES = [
+  { id: 1, label: 'Gói 1 tháng', price: 10000 },
+  { id: 2, label: 'Gói 3 tháng', price: 25000 },
+  { id: 3, label: 'Gói 6 tháng', price: 45000 },
+];
+
+const handleUpgrade = async (packageId) => {
+  try {
+    const now = new Date().toISOString();
+    const res = await apiClient.post('https://moca.mom:2030/api/PurchasedPackage', {
+      packageId,
+      purchaseDate: now,
+      status: 'Pending',
+      discountId: 1
+    });
+    const purchasePackageId = res?.purchasePackageId || res?.purchasePackageId;
+    if (!purchasePackageId) throw new Error('Không lấy được purchasePackageId');
+    const payRes = await apiClient.post(`https://moca.mom:2030/api/PayPackage/create-payment-url/${purchasePackageId}`);
+    const paymentUrl = payRes?.paymentUrl;
+    if (paymentUrl) {
+      window.location.href = paymentUrl;
+    } else {
+      alert('Không lấy được link thanh toán!');
+    }
+  } catch (err) {
+    alert('Có lỗi khi nâng cấp gói!');
+    console.error(err);
+  }
+};
 
 const HomePage = () => {
   return (

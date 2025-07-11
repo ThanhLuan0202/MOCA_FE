@@ -32,88 +32,103 @@
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
-    background: linear-gradient(90deg, #f8fafc 60%, #f3e8ff 100%);
-    border-radius: 14px;
-    box-shadow: 0 2px 12px rgba(118,75,162,0.07);
-    padding: 24px 20px;
-    gap: 18px;
-    transition: box-shadow 0.2s;
-    border-left: 5px solid #764ba2;
+    background: linear-gradient(120deg, #f8fafc 60%, #f3e8ff 100%);
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(106,90,249,0.10);
+    padding: 28px 24px;
+    gap: 22px;
+    border-left: 6px solid #6a5af9;
+    border-right: 6px solid #8f6aff22;
     position: relative;
-
-    &:hover {
-      box-shadow: 0 6px 24px rgba(118,75,162,0.13);
-    }
-
-    .doctor-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-width: 200px;
-
-      .doctor-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #764ba2;
-        background: #fff;
-      }
-      .doctor-name {
-        font-weight: 600;
-        font-size: 1.1rem;
-        color: #333;
-      }
-      .doctor-specialization {
-        font-size: 0.95rem;
-        color: #764ba2;
-      }
-    }
-
-    .booking-details {
-      flex: 1;
-      min-width: 220px;
-      font-size: 1rem;
-      color: #444;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-left: 10px;
-      b {
-        color: #764ba2;
-        font-weight: 500;
-      }
-    }
-
-    .booking-price {
-      min-width: 140px;
-      text-align: right;
-      font-size: 1rem;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      b {
-        color: #764ba2;
-        font-weight: 500;
-      }
-    }
+    transition: box-shadow 0.22s, transform 0.18s;
+    margin-bottom: 0;
   }
-
+  .booking-card:hover {
+    box-shadow: 0 12px 36px #6a5af933;
+    transform: translateY(-2px) scale(1.02);
+  }
+  .doctor-info .doctor-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid #6a5af9;
+    background: #fff;
+    box-shadow: 0 2px 8px #6a5af922;
+  }
+  .doctor-info .doctor-name {
+    font-weight: 700;
+    font-size: 1.18rem;
+    color: #2d1e6b;
+  }
+  .doctor-info .doctor-specialization {
+    font-size: 1.01rem;
+    color: #8f6aff;
+  }
+  .booking-details {
+    flex: 1;
+    min-width: 220px;
+    font-size: 1.04rem;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 12px;
+  }
+  .booking-details b {
+    color: #6a5af9;
+    font-weight: 600;
+  }
+  .booking-price {
+    min-width: 150px;
+    text-align: right;
+    font-size: 1.08rem;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .booking-price b {
+    color: #8f6aff;
+    font-weight: 700;
+    font-size: 1.13em;
+  }
+  .booking-details span[style] {
+    font-size: 1.08em;
+    padding: 2px 10px;
+    border-radius: 8px;
+    background: #f3f0ff;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+  .doctor-avatar-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #f3f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid #6a5af9;
+    box-shadow: 0 2px 8px #6a5af922;
+    margin-right: 0;
+  }
   @media (max-width: 700px) {
-    padding: 8px;
     .booking-card {
       flex-direction: column;
       align-items: stretch;
-      padding: 16px 8px;
-      .doctor-info, .booking-details, .booking-price {
-        min-width: unset;
-        text-align: left;
-        margin-left: 0;
-      }
-      .booking-price {
-        text-align: left;
-      }
+      padding: 18px 8px;
+    }
+    .doctor-info, .booking-details, .booking-price {
+      min-width: unset;
+      text-align: left;
+      margin-left: 0;
+      align-items: flex-start;
+    }
+    .booking-price {
+      text-align: left;
+      align-items: flex-start;
     }
   }
 } 

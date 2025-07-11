@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './BookingHistoryPage.scss';
+import { FaUserMd } from 'react-icons/fa';
 
 const consultationTypeText = (type) => {
   switch(type) {
@@ -27,7 +28,7 @@ const formatDateTime = (iso) => {
 };
 
 const statusText = (status) => {
-  if (status === 'Confirm') return 'Đã đặt cọc';
+  if (status === 'Confirm') return 'Đã thanh toán';
   return status;
 };
 
@@ -43,7 +44,7 @@ const BookingHistoryPage = () => {
       try {
         const token = localStorage.getItem('authToken');
         const res = await axios.get(
-          'https://moca-d8fxfqgdb4hxg5ha.southeastasia-01.azurewebsites.net/api/DoctorBooking/GetAllByUser',
+          'https://moca.mom:2030/api/DoctorBooking/GetAllByUser',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,11 +74,9 @@ const BookingHistoryPage = () => {
         {bookings.map(booking => (
           <div className="booking-card" key={booking.bookingId}>
             <div className="doctor-info">
-              <img src={
-                booking.doctor?.image ||
-                booking.doctor?.user?.image ||
-                'https://via.placeholder.com/60'
-              } alt={booking.doctor?.fullName} className="doctor-avatar" />
+              <div className="doctor-avatar doctor-avatar-icon">
+                <FaUserMd size={38} color="#6a5af9" />
+              </div>
               <div>
                 <div className="doctor-name">{booking.doctor?.fullName}</div>
                 <div className="doctor-specialization">{booking.doctor?.specialization}</div>
@@ -85,13 +84,11 @@ const BookingHistoryPage = () => {
             </div>
             <div className="booking-details">
               <div><b>Ngày giờ:</b> <span>{formatDateTime(booking.bookingDate)}</span></div>
-              <div><b>Hình thức:</b> {consultationTypeText(booking.consultationType)}</div>
               <div><b>Trạng thái:</b> <span style={{color: statusColor(booking.status), fontWeight: 600}}>{statusText(booking.status)}</span></div>
               <div><b>Ghi chú:</b> {booking.notes || 'Không có'}</div>
             </div>
             <div className="booking-price">
               <div><b>Phí:</b> {booking.price?.toLocaleString('vi-VN')} VNĐ</div>
-              <div><b>Đặt cọc:</b> {booking.requiredDeposit?.toLocaleString('vi-VN')} VNĐ</div>
             </div>
           </div>
         ))}

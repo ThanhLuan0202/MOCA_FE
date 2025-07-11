@@ -51,7 +51,7 @@ const Header = () => {
           <Link to="/">
             <p>Home</p>
           </Link>
-          {!(isLoggedIn && currentUser?.roleId === 4) && (
+          {!(isLoggedIn && currentUser?.roleId === 4) && !showRegisterMom && (
             <Link to="/pregnancy-diary">
               <p>Nhật ký thai kỳ</p>
             </Link>

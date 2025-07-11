@@ -1,0 +1,51 @@
+.payment-cancel-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #fff 60%, #ffe0e0 100%);
+  padding: 32px 12px;
+}
+.cancel-icon {
+  font-size: 64px;
+  margin-bottom: 18px;
+  animation: shake 0.7s cubic-bezier(.4,2,.6,1);
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+h1 {
+  color: #e53935;
+  font-size: 2.1em;
+  margin-bottom: 12px;
+  text-align: center;
+}
+p {
+  color: #444;
+  font-size: 1.15em;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.back-home-btn {
+  background: linear-gradient(90deg,#e53935 60%,#ff6f60 100%);
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #e5393533;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+.back-home-btn:hover {
+  background: linear-gradient(90deg,#ff6f60 60%,#e53935 100%);
+  box-shadow: 0 4px 16px #ff6f6033;
+  transform: translateY(-2px) scale(1.04);
+} 
